@@ -28,6 +28,7 @@ import TodayFollow from './pages/Table/TodayFollow';
 import TodaySiteVisit from './pages/Table/TodaySiteVisit';
 import TommorowSiteVisit from './pages/Table/TommorowSiteVisit';
 import UpdateCreateForm from './pages/UpdateCreateForm';
+import ConnectForm from './pages/ConnectForm';
 
 const App = () => {
   return (
@@ -69,6 +70,7 @@ const App = () => {
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/support" element={<ContactSupport />} />
         <Route path="/mastersetting" element={<MasterSetting />} />
+        <Route path='/connect-form' element={<ConnectForm />} />
       </Route>
 
       {/* Fallback */}

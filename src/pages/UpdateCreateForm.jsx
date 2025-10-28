@@ -148,7 +148,7 @@ const UpdateCreateForm = () => {
         }
     };
     const handleFilterChange = async (e) => {
-        const teamleaderId = e.target.value
+        const teamleaderId = e.target.value 
         setTeamLeaderId(teamleaderId)
 
         try {
@@ -168,7 +168,7 @@ const UpdateCreateForm = () => {
     }
     const handleAgentId = (e) => {
         const AgentId = e.target.value
-        console.log("AgentId", AgentId)
+        // console.log("AgentId", AgentId)
         setAgentId(AgentId)
     }
     // get data api
@@ -181,7 +181,7 @@ const UpdateCreateForm = () => {
                 }
             })
             if (res.data.status === 200) {
-                console.log("fetchdata", res.data)
+                // console.log("fetchdata", res.data)
                 const fetchdata = res.data.data
 
                 setName(fetchdata.name)
@@ -257,14 +257,14 @@ const UpdateCreateForm = () => {
             lead_status: leadStatus,
 
         };
-        console.log("post for update", formData)
+        // console.log("post for update", formData)
         try {
             const res = await api.post("https://api.almonkdigital.in/api/admin/update-lead", formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             });
-            console.log("response", res)
+            // console.log("response", res)
             if (res.data.status == 200) {
 
                 toast.success("Client Update successfully!");
@@ -276,7 +276,7 @@ const UpdateCreateForm = () => {
         }
     };
 
-    console.log("check", getnote)
+    // console.log("check", getnote)
     // console.log("check", getnote)
     return (
         <div className="container">

@@ -32,7 +32,7 @@ export default function MiniDrawer() {
     });
   };
 
-  console.log(user)
+  // console.log(user)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', fontFamily: 'Helvetica, Arial, sans-serif' }}>
       {/* Top Bar */}
@@ -52,7 +52,7 @@ export default function MiniDrawer() {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           {/* User Profile or icon can go here */}
-          <span style={{ fontSize: '15px', cursor: 'pointer' }}><img src={imgad} style={{ height: "22px" }} />{user.name}  ({user.role})</span>
+          <span style={{ fontSize: '15px', cursor: 'pointer' }}><img src={imgad} style={{ height: "22px" }} />{user?.name}  ({user?.role})</span>
         </div>
       </div>
 
@@ -74,6 +74,7 @@ export default function MiniDrawer() {
               <Link
                 to="/dashboard"
                 style={{
+                  fontSize: "12px",
                   color: 'white', textDecoration: 'none',
                   display: 'flex', alignItems: 'center',
                   padding: '10px', borderRadius: '5px',
@@ -94,6 +95,7 @@ export default function MiniDrawer() {
                 style={{
                   color: 'white',
                   border: 'none',
+                  fontSize: "12px",
                   width: '100%',
                   textAlign: 'left',
                   padding: '10px',
@@ -118,6 +120,7 @@ export default function MiniDrawer() {
                   <Link to="/leads/create" style={{ color: 'white', textDecoration: 'none' }}> <li style={{
                     marginBottom: '10px', padding: '8px 12px',
                     borderLeft: '4px solid #003961',
+                    fontSize: "12px",
                     background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px',
 
                   }}>
@@ -126,6 +129,7 @@ export default function MiniDrawer() {
                   <Link to="/leads/bulk-upload" style={{ color: 'white', textDecoration: 'none' }}><li style={{
                     marginBottom: '10px', padding: '8px 12px',
                     borderLeft: '4px solid #003961',
+                    fontSize: "12px",
                     background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'
                   }}>
                     Bulk Upload
@@ -148,6 +152,7 @@ export default function MiniDrawer() {
                 onClick={() => setIsProjectsOpen((prev) => !prev)}
                 style={{
                   color: 'white',
+                  fontSize: "12px",
                   border: 'none',
                   width: '100%',
                   textAlign: 'left',
@@ -175,6 +180,7 @@ export default function MiniDrawer() {
                     style={{ color: 'white', textDecoration: 'none' }}> <li style={{
                       marginBottom: '10px', padding: '8px 12px',
                       borderLeft: '4px solid #003961',
+                      fontSize: "12px",
                       background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'
                     }}>
                       Add New User
@@ -183,6 +189,7 @@ export default function MiniDrawer() {
                   >   <li style={{
                     marginBottom: '10px', padding: '8px 12px',
                     borderLeft: '4px solid #003961',
+                    fontSize: "12px",
                     background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'
 
                   }}>
@@ -205,6 +212,7 @@ export default function MiniDrawer() {
               <Link
                 to="/mastersetting"
                 style={{
+                  fontSize: "12px",
                   color: 'white', textDecoration: 'none',
                   display: 'flex', alignItems: 'center',
                   padding: '10px', borderRadius: '5px',
@@ -217,6 +225,24 @@ export default function MiniDrawer() {
                 Master Setting
               </Link>
             </li>
+            {/*      Connect Form*/}
+            <li style={{ marginBottom: '15px' }}>
+              <Link
+                to="/connect-form"
+                style={{
+                  fontSize: "12px",
+                  color: 'white', textDecoration: 'none',
+                  display: 'flex', alignItems: 'center',
+                  padding: '10px', borderRadius: '5px',
+                  background: location.pathname === "/connect-form" ? "#003961" : "none",
+                  transition: 'background 0.3s'
+                }}
+                onMouseOver={(e) => e.target.style.background = "#003961"}
+                onMouseOut={(e) => e.target.style.background = location.pathname === "/connect-form" ? "#003961" : "none"}
+              >
+                Connect Form
+              </Link>
+            </li>
             {/* Table Menu */}
             <li style={{ marginBottom: '15px' }}>
 
@@ -226,6 +252,7 @@ export default function MiniDrawer() {
               <Link
                 to="/support"
                 style={{
+                  fontSize: "12px",
                   color: 'white', textDecoration: 'none',
                   display: 'flex', alignItems: 'center',
                   padding: '10px', borderRadius: '5px',
@@ -250,7 +277,8 @@ export default function MiniDrawer() {
                 border: 'none', width: '100%', textAlign: 'left',
                 padding: '10px', borderRadius: '5px',
                 background: 'rgba(0, 222, 155, 0.05)',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontSize: "12px",
               }}
               onMouseOver={(e) => e.target.style.background = "#003961"}
               onMouseOut={(e) => e.target.style.background = "rgba(45, 4, 106, 0.05)"}

@@ -33,7 +33,7 @@ function UserForm() {
             crm_app_access: crmAccess,
             login_device: deviceLogin,
         };
-        console.log("send data", formData)
+        // console.log("send data", formData)
         try {
             const res = await api.post(`/add-user`, formData, {
                 headers: {
@@ -72,7 +72,7 @@ function UserForm() {
             })
             if (resTL.status === 200) {
                 setTeamLeaderList(resTL.data.data)
-                console.log(resTL.data.data)
+                // console.log(resTL.data.data)
             }
         } catch (error) {
             console.log(error)

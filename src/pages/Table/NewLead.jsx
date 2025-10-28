@@ -37,7 +37,7 @@ const NewLead = () => {
       });
 
       const result = res?.data?.data;
-      console.log(result)
+      // console.log(result)
       if (res.status === 200 && Array.isArray(result)) {
         const mapped = result.map((item, index) => ({
           id: (page - 1) * rowsPerPage + index + 1,

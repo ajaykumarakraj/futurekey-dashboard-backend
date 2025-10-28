@@ -31,11 +31,11 @@ const CreateForm = () => {
 
 
   // team Leader
-  const [teamLeader, setTeamLeader] = useState([]);
-  const [teamleaderId, setTeamLeaderId] = useState([]);
+  const [teamLeader, setTeamLeader] = useState("");
+  const [teamleaderId, setTeamLeaderId] = useState("");
 
   // agent
-  const [agentid, setAgentId] = useState([])
+  const [agentid, setAgentId] = useState("")
   const [agent, setAgent] = useState([]);
 
 
@@ -67,7 +67,7 @@ const CreateForm = () => {
         }
       })
       if (resstate.status === 200) {
-        console.log("state", resstate.data.data)
+        // console.log("state", resstate.data.data)
         setState(resstate.data.data)
       }
     }
@@ -84,7 +84,7 @@ const CreateForm = () => {
       })
 
       if (teamleaderres.status === 200) {
-        console.log(teamleaderres.data.data)
+        // console.log(teamleaderres.data.data)
         setTeamLeader(teamleaderres.data.data)
       }
     } catch (error) {
@@ -101,7 +101,7 @@ const CreateForm = () => {
       if (response.status === 200) {
 
         const getData = response.data.data
-        console.log(getData)
+        // console.log(getData)
         setRequire(getData.filter(item => item.cat_name === "Require Measurement"))
         setProjectList(getData.filter(item => item.cat_name === "Project"))
         setLeadSourceList(getData.filter(item => item.cat_name === "Lead Source"))
@@ -113,7 +113,7 @@ const CreateForm = () => {
   const handleFilterChange = async (e) => {
     const teamleaderId = e.target.value
     setTeamLeaderId(teamleaderId)
-    console.log("id", teamleaderId)
+    // console.log("id", teamleaderId)
     try {
       const agentRes = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${teamleaderId}`, {
         headers: {
@@ -121,7 +121,7 @@ const CreateForm = () => {
         }
       })
       if (agentRes.status === 200) {
-        console.log("agent", agentRes.data.data)
+        // console.log("agent", agentRes.data.data)
         setAgent(agentRes.data.data)
       }
     }
@@ -132,7 +132,7 @@ const CreateForm = () => {
 
   const handleAgentId = (e) => {
     const AgentId = e.target.value
-    console.log("AgentId", AgentId)
+    // console.log("AgentId", AgentId)
     setAgentId(AgentId)
   }
   const handleSubmit = async (e) => {
@@ -158,7 +158,7 @@ const CreateForm = () => {
       team_leader: teamleaderId,
       agent: agentid,
     };
-    console.log("create lead", formData)
+    // console.log("create lead", formData)
     try {
       const res = await api.post("https://api.almonkdigital.in/api/create-customer", formData, {
         headers: {
@@ -185,7 +185,7 @@ const CreateForm = () => {
       toast.error("Failed to add client. Try again.");
     }
   };
-  console.log("check", user)
+  // console.log("check", user)
   // console.log("vdgfdgf", statedata)
   return (
     <div className="container">

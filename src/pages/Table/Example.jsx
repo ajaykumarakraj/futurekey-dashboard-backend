@@ -44,8 +44,9 @@ const Example = ({ data, columns, rowsPerPageOptions = [5, 10, 25] }) => {
       <table className="custom-table">
         <thead>
           <tr>
-            {columns.map((column) => (
-              <th key={column.field}>
+            {columns.map((column, i) => (
+
+              <th key={i}>
                 <div>{column.headerName}</div>
                 <input
                   type="text"
@@ -54,15 +55,16 @@ const Example = ({ data, columns, rowsPerPageOptions = [5, 10, 25] }) => {
                   style={{ width: "100%", marginTop: "5px" }}
                 />
               </th>
+
             ))}
           </tr>
         </thead>
         <tbody>
           {paginatedData.length > 0 ? (
-            paginatedData.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {columns.map((column) => (
-                  <td key={column.field}>
+            paginatedData.map((row, i) => (
+              <tr key={i}>
+                {columns.map((column, i) => (
+                  <td key={i}>
                     {column.renderCell ? column.renderCell(row) : row[column.field]}
                   </td>
                 ))}

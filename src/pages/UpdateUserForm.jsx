@@ -29,7 +29,7 @@ function UpdateUserForm() {
 
                 if (res.data.status === 200 && typeof res.data.data === "object") {
                     const user = res.data.data;
-                    console.log("get data", user)
+                    // console.log("get data", user)
                     setName(user.name || "");
                     setPhone(user.phone || "");
                     setGender(user.gender || "");
@@ -64,7 +64,7 @@ function UpdateUserForm() {
             crm_app_access: crmAccess,
             login_device: deviceLogin,
         };
-        console.log("post", formData)
+        // console.log("post", formData)
         try {
             const res = await api.post(`/update-user`, formData, {
                 headers: {
@@ -73,7 +73,7 @@ function UpdateUserForm() {
             });
 
             if (res.data.status === 200) {
-                console.log(res.data)
+                // console.log(res.data)
                 toast.success("User updated successfully");
             } else {
                 toast.error("Failed to update user");
@@ -82,7 +82,7 @@ function UpdateUserForm() {
             toast.error("Error submitting form");
         }
     };
-    console.log("deviceLogin", id)
+    // console.log("deviceLogin", id)
     return (
         <div className="container">
             <h2 className="mb-4 text-center textsize">Edit User</h2>

@@ -51,7 +51,7 @@ const Dashboard = () => {
         // { title: 'Create Lead', key: null, path: '/leads/create' },
         // { title: 'Table View', key: null, path: '/table' },
     ];
-
+    // console.log(token)
     return (
         <div className="dashboard-container">
             <div className="card-grid">

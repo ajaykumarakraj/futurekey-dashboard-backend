@@ -118,12 +118,12 @@ const FreshLead = () => {
       project_id: filters.projectId,
       user_id: user.user_id
     };
-    console.log("check", payload)
+    // console.log("check", payload)
     try {
       const res = await api.post("/assign-lead", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      console.log(res)
+      // console.log(res)
       if (res?.status === 200) {
         alert("Leads transferred!");
         setSelectedLeads([]);
