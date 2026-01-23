@@ -29,6 +29,7 @@ import TodaySiteVisit from './pages/Table/TodaySiteVisit';
 import TommorowSiteVisit from './pages/Table/TommorowSiteVisit';
 import UpdateCreateForm from './pages/UpdateCreateForm';
 import ConnectForm from './pages/ConnectForm';
+import Reassign from './pages/Table/Reassign';
 
 const App = () => {
   return (
@@ -57,9 +58,10 @@ const App = () => {
         <Route path='leads/missedfollowup' element={<MissedFollowLead />} />
         <Route path='/lead/scheduledsite' element={<ScheduledSiteLead />} />
         <Route path='/lead/todayfollow' element={<TodayFollow />} />
-        <Route path='/lead/TodaySiteVisit' element={<TodaySiteVisit />} />
+        <Route path='/lead/todaysitevisit' element={<TodaySiteVisit />} />
         <Route path='/lead/TommorowSiteVisit' element={<TommorowSiteVisit />} />
         <Route path="/leads/create" element={<CreateForm />} />
+        <Route path="/leads/reassign" element={<Reassign/>}/>
         <Route path="/leads/bulk-upload" element={<WalkUpload />} />
         <Route path="/leads/table" element={<CustomTable />} />
         <Route path="/user/table" element={<UserMangementTable />} />

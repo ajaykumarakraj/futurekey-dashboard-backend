@@ -348,3 +348,97 @@ button:hover {
     font-size: 12px !important;
     width: 100%;
 }
+.dashboard-container {
+  padding: 24px;
+}
+
+.dashboard-header h2 {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.dashboard-header p {
+  color: #000;
+  font-size: 14px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+/* CARD */
+.pro-card {
+  position: relative;
+     background: linear-gradient(355deg, #c5adad40, #c2c2c2);
+  border-radius: 14px;
+  padding: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.pro-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ICON */
+.emoji-icon {
+  font-size: 30px;
+}
+
+/* INFO */
+.card-info span {
+  font-size: 13px;
+  color: #000;
+}
+
+.card-info .count {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ARROW */
+.card-arrow {
+  margin-left: auto;
+  font-size: 18px;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.3s ease;
+}
+
+.pro-card:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* URGENT BADGE */
+.urgent-badge {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.emoji-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: #f8fafc;   /* very light background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;       /* emoji size */
+  box-shadow: inset 0 0 0 1px #e5e7eb;
+}

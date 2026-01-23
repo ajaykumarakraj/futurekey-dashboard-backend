@@ -84,7 +84,7 @@ export default function MiniDrawer() {
                 onMouseOver={(e) => e.target.style.background = "#003961"}
                 onMouseOut={(e) => e.target.style.background = location.pathname === "/dashboard" ? "#003961" : "none"}
               >
-                Dashboard
+               📊 Dashboard
               </Link>
             </li>
 
@@ -109,7 +109,7 @@ export default function MiniDrawer() {
                 onMouseOver={(e) => e.target.style.background = "#003961"}
                 onMouseOut={(e) => e.target.style.background = isLeadsOpen ? "#003961" : "none"}
               >
-                Leads <span>{isLeadsOpen ? '▾' : '▸'}</span>
+              👥  Leads <span>{isLeadsOpen ? '▾' : '▸'}</span>
               </button>
 
               {isLeadsOpen && (
@@ -124,7 +124,7 @@ export default function MiniDrawer() {
                     background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px',
 
                   }}>
-                    Create New
+                   🆕 Create New
                   </li></Link>
                   <Link to="/leads/bulk-upload" style={{ color: 'white', textDecoration: 'none' }}><li style={{
                     marginBottom: '10px', padding: '8px 12px',
@@ -132,7 +132,7 @@ export default function MiniDrawer() {
                     fontSize: "12px",
                     background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'
                   }}>
-                    Bulk Upload
+                   📤 Bulk Upload
                   </li></Link>
                   {/* <Link to="/leads/table" style={{ color: 'white', textDecoration: 'none' }}>   <li style={{
                     marginBottom: '10px', padding: '8px 12px',
@@ -167,7 +167,7 @@ export default function MiniDrawer() {
                 onMouseOver={(e) => e.target.style.background = "#003961"}
                 onMouseOut={(e) => e.target.style.background = isProjectsOpen ? "#003961" : "none"}
               >
-                User Management <span>{isProjectsOpen ? '▾' : '▸'}</span>
+               👤 User Management <span>{isProjectsOpen ? '▾' : '▸'}</span>
               </button>
 
               {isProjectsOpen && (
@@ -183,7 +183,7 @@ export default function MiniDrawer() {
                       fontSize: "12px",
                       background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'
                     }}>
-                      Add New User
+                    ➕  Add New User
                     </li></Link>
                   <Link to="user/table" style={{ color: 'white', textDecoration: 'none' }}
                   >   <li style={{
@@ -193,7 +193,7 @@ export default function MiniDrawer() {
                     background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'
 
                   }}>
-                      View All User
+                     📋 View All User
                     </li></Link>
                   {/* <li style={{
                     marginBottom: '10px', padding: '8px 12px',
@@ -222,7 +222,7 @@ export default function MiniDrawer() {
                 onMouseOver={(e) => e.target.style.background = "#003961"}
                 onMouseOut={(e) => e.target.style.background = location.pathname === "/mastersetting" ? "#003961" : "none"}
               >
-                Master Setting
+               ⚙️ Master Setting
               </Link>
             </li>
             {/*      Connect Form*/}
@@ -240,7 +240,7 @@ export default function MiniDrawer() {
                 onMouseOver={(e) => e.target.style.background = "#003961"}
                 onMouseOut={(e) => e.target.style.background = location.pathname === "/connect-form" ? "#003961" : "none"}
               >
-                Connect Form
+              🔗  Connect Form
               </Link>
             </li>
             {/* Table Menu */}
@@ -262,7 +262,7 @@ export default function MiniDrawer() {
                 onMouseOver={(e) => e.target.style.background = "#003961"}
                 onMouseOut={(e) => e.target.style.background = location.pathname === "/support" ? "#003961" : "none"}
               >
-                Contact Support
+              🛟  Contact Support
               </Link>
             </li>
 
@@ -283,7 +283,7 @@ export default function MiniDrawer() {
               onMouseOver={(e) => e.target.style.background = "#003961"}
               onMouseOut={(e) => e.target.style.background = "rgba(45, 4, 106, 0.05)"}
             >
-              Sign Out
+             🚪 Sign Out
             </button>
           </ul>
         </div>

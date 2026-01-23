@@ -181,26 +181,26 @@ const UpdateCreateForm = () => {
                 }
             })
             if (res.data.status === 200) {
-                // console.log("fetchdata", res.data)
+                console.log("fetchdata", res.data)
                 const fetchdata = res.data.data
 
-                setName(fetchdata.name)
-                setNumber(fetchdata.contact)
-                setAltnumber(fetchdata.alt_contact)
-                setSelectedGender(fetchdata.gender)
-                setSelectedState(fetchdata.state)
-                setCity(fetchdata.city)
-                setSelectCustomer(fetchdata.customer_type)
-                setRequirement(fetchdata.requirement)
-                setLeadSource(fetchdata.lead_source)
-                setSelectProject(fetchdata.project_id)
-                setGetTeamLeader(res.data.tl_name)
-                setGetAgent(res.data.agent_name)
-                setAgentId(fetchdata.assign_agent_id)
+                setName(fetchdata.name||"")
+                setNumber(fetchdata.contact||"")
+                setAltnumber(fetchdata.alt_contact||"")
+                setSelectedGender(fetchdata.gender||"")
+                setSelectedState(fetchdata.state||"")
+                setCity(fetchdata.city||"")
+                setSelectCustomer(fetchdata.customer_type||"")
+                setRequirement(fetchdata.requirement||"")
+                setLeadSource(fetchdata.lead_source||"")
+                setSelectProject(fetchdata.project_id||"")
+                setGetTeamLeader(res.data.tl_name||"")
+                setGetAgent(res.data.agent_name||"")
+                setAgentId(fetchdata.assign_agent_id||"")
 
-                setTeamLeaderId(fetchdata.assign_team_leader_id)
-                setGetNote(res.data.notes)
-                setLeadStatus(fetchdata.lead_status)
+                setTeamLeaderId(fetchdata.assign_team_leader_id||"")
+                setGetNote(res.data.notes||"")
+                setLeadStatus(fetchdata.lead_status||"")
             }
         } catch (error) {
             console.log(error)
