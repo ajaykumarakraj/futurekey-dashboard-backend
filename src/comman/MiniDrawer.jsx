@@ -126,6 +126,14 @@ export default function MiniDrawer() {
                   }}>
                    🆕 Create New
                   </li></Link>
+                    <Link to="/leads/lead-transfer" style={{ color: 'white', textDecoration: 'none' }}><li style={{
+                    marginBottom: '10px', padding: '8px 12px',
+                    borderLeft: '4px solid #003961',
+                    fontSize: "12px",
+                    background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'
+                  }}>
+                   🔁 Leads Transfer
+                  </li></Link>
                   <Link to="/leads/bulk-upload" style={{ color: 'white', textDecoration: 'none' }}><li style={{
                     marginBottom: '10px', padding: '8px 12px',
                     borderLeft: '4px solid #003961',

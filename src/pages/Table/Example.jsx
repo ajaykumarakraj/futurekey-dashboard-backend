@@ -15,14 +15,14 @@ const Example = ({ data, columns, rowsPerPageOptions = [5, 10, 25] }) => {
     setPage(0); // Reset to first page on filter
   };
 
-  const handleChangePage = (newPage) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = (e) => {
-    setRowsPerPage(parseInt(e.target.value));
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (e) => {
+  //   setRowsPerPage(parseInt(e.target.value));
+  //   setPage(0);
+  // };
 
   const filteredData = data.filter((row) =>
     columns.every((column) =>
@@ -37,7 +37,7 @@ const Example = ({ data, columns, rowsPerPageOptions = [5, 10, 25] }) => {
     page * rowsPerPage + rowsPerPage
   );
 
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  // const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
   return (
     <div className="table-wrapper">

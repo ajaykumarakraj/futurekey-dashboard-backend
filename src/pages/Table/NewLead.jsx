@@ -270,19 +270,13 @@ try {
           </select> */}
   <select onChange={handleStatus} >
           <option value="">Select Leads Status</option>
-         
-            <option  value="1">New Lead</option>
-              <option  value="11">Reassign Leads</option>
-                <option  value="2">In Progress Leads</option>
-                  <option  value="3">Hot Leads</option>
-                    <option  value="8">Today Follow up</option>
-                      <option  value="6">Missed Follow up</option>
-                        <option  value="9">Tommorow Site Visit</option>
-                        <option  value="7">Today Site Visit</option>
-                          <option  value="10">Scheduled Site Leads</option>
-                            <option  value="0">Fresh Leads</option>
-       <option  value="4">Archived Leads</option>
-         <option  value="5">Converted Leads</option>
+          <option  value="1">New Lead</option>
+            <option  value="11">Reassign Leads</option>
+            <option  value="2">In Progress Leads</option>
+            <option  value="3">Hot Leads</option>
+            <option  value="0">Fresh Leads</option>
+            <option  value="4">Archived Leads</option>
+            <option  value="5">Converted Leads</option>
         </select>
           <select onChange={handleProjectChange} value={filters.projectId}>
           <option value="">Select Project</option>

@@ -33,7 +33,7 @@ label {
 
 select,
 input {
-    font-size: 12px !important;
+    font-size: 10px !important;
 }
 
 .notediv {
@@ -56,7 +56,7 @@ input {
 .custom-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .custom-table th,

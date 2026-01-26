@@ -8,7 +8,7 @@ const CustomTable = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalRecords, setTotalRecords] = useState(0);
+  // const [totalRecords, setTotalRecords] = useState(0);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;

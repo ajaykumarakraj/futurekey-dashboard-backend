@@ -30,6 +30,7 @@ import TommorowSiteVisit from './pages/Table/TommorowSiteVisit';
 import UpdateCreateForm from './pages/UpdateCreateForm';
 import ConnectForm from './pages/ConnectForm';
 import Reassign from './pages/Table/Reassign';
+import LeadTransfer from './pages/Table/LeadTransfer';
 
 const App = () => {
   return (
@@ -50,7 +51,8 @@ const App = () => {
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="leads/fresh" element={<FreshLead />} />
-        <Route path="leads/new" element={<NewLead />} />
+          <Route path="/leads/lead-transfer" element={<LeadTransfer />} />
+        <Route path="/leads/new" element={<NewLead />} />
         <Route path='/leads/inprogress' element={<InProgressLead />} />
         <Route path='/leads/hot' element={<HotLead />} />
         <Route path='/leads/archived' element={<ArchivedLead />} />
