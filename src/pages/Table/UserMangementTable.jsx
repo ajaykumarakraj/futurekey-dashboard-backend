@@ -6,14 +6,23 @@ import { useNavigate } from "react-router-dom";
 const UserManagementTable = () => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [nextPageURL, setNextPageURL] = useState(null);
-    const [prevPageURL, setPrevPageURL] = useState(null);
-    const [totalRecords, setTotalRecords] = useState(0);
-    const [loading, setLoading] = useState(false);
 
-    const handleSearch = async (url = "/user-list") => {
+    // const [totalRecords, setTotalRecords] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [loginstatus,setLoginstatus]=useState(1)
+// console.log("status",loginstatus)
+
+
+const hanhlestatus=(e)=>{
+  const   value=e.target.value
+// console.log(value)
+setLoginstatus(value)
+}
+
+
+
+    const handleSearch = async (url = `/user-list/${loginstatus}`) => {
+        // console.log(url)
         try {
             setLoading(true);
             let res;
@@ -34,15 +43,12 @@ const UserManagementTable = () => {
                     email: item.email,
                     phone: item.phone,
                     role: item.role,
-                    assign_team_leader: item.assign_team_leader
+                    assign_team_leader: item.assign_team_leader,
+                    login_status:item.login_status
                 }));
-
+console.log(mapped)
                 setData(mapped);
-                setCurrentPage(res?.meta?.current_page || 1);
-                setTotalPages(res?.meta?.last_page || 1);
-                setTotalRecords(res?.meta?.total || 0);
-                setNextPageURL(res?.meta?.next_page_url || null);
-                setPrevPageURL(res?.meta?.prev_page_url || null);
+            
             } else {
                 console.error('API did not return expected format');
                 setData([]);
@@ -54,14 +60,14 @@ const UserManagementTable = () => {
         }
     };
 
-    const handlePageChange = (page) => {
-        handleSearch(`/user-list?page=${page}`);
-    };
+    // const handlePageChange = (page) => {
+    //     handleSearch(`/user-list?page=${page}`);
+    // };
 
     useEffect(() => {
-        handleSearch("/user-list");
+        handleSearch( `/user-list/${loginstatus}`);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [loginstatus]);
 
     const handleEdit = (row) => {
         navigate(`/user/update/${row.id}`);
@@ -73,7 +79,9 @@ const UserManagementTable = () => {
         { field: "email", headerName: "Email", align: "left" },
         { field: "phone", headerName: "Contact Number", align: "center" },
         { field: "role", headerName: "Role", align: "center" },
+   
         { field: "assign_team_leader", headerName: "Team Leader", align: "center" },
+         { field: "login_status", headerName: "Login Status", align: "center" },
         {
             headerName: "Actions",
             align: "center",
@@ -95,18 +103,30 @@ const UserManagementTable = () => {
         }
     ];
 
+
+
+
+
+
     return (
         <div>
             {/* Show total records */}
             <p style={{ textAlign: "center", fontWeight: "bold" }}>
-                Total Records: {totalRecords}
+                
             </p>
-
+<div className="loginstatus">
+    <p>Select Status</p>
+<select onChange={hanhlestatus}>
+    <option value="1">Active</option>
+      <option value="0">InActive</option>
+        <option value="all">All</option>
+</select>
+</div>
             {/* Table Section */}
             {loading ? (
                 <p style={{ textAlign: "center" }}>Loading...</p>
             ) : (
-                <Example data={data} columns={columns} rowsPerPageOptions={[20]} />
+                <Example data={data} columns={columns} rowsPerPageOptions={[1000]} />
             )}
 
             {/* Pagination Section */}
@@ -117,74 +137,12 @@ const UserManagementTable = () => {
                 justifyContent: "center",
                 gap: "10px"
             }}>
-                {/* Prev Button */}
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={!prevPageURL}
-                    style={{
-                        padding: "8px 16px",
-                        backgroundColor: !prevPageURL ? "#e0e0e0" : "#003961",
-                        color: !prevPageURL ? "#888" : "#ffffff",
-                        border: "none",
-                        borderRadius: "6px",
-                        cursor: !prevPageURL ? "not-allowed" : "pointer"
-                    }}
-                >
-                    Prev
-                </button>
+                
 
-                {/* Show only 5 page numbers */}
-                {(() => {
-                    const pageNumbers = [];
-                    let start = Math.max(1, currentPage - 2);
-                    let end = Math.min(totalPages, currentPage + 2);
+               
 
-                    if (end - start < 4) {
-                        if (start === 1) {
-                            end = Math.min(totalPages, start + 4);
-                        } else if (end === totalPages) {
-                            start = Math.max(1, end - 4);
-                        }
-                    }
-
-                    for (let i = start; i <= end; i++) {
-                        pageNumbers.push(i);
-                    }
-
-                    return pageNumbers.map((page) => (
-                        <button
-                            key={page}
-                            onClick={() => handlePageChange(page)}
-                            disabled={currentPage === page}
-                            style={{
-                                padding: "8px 16px",
-                                backgroundColor: currentPage === page ? "#003961" : "#e0e0e0",
-                                color: currentPage === page ? "#ffffff" : "#000",
-                                border: "none",
-                                borderRadius: "6px",
-                                cursor: "pointer"
-                            }}
-                        >
-                            {page}
-                        </button>
-                    ));
-                })()}
-
-                {/* Next Button */}
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={!nextPageURL}
-                    style={{
-                        padding: "8px 16px",
-                        backgroundColor: !nextPageURL ? "#e0e0e0" : "#003961",
-                        color: !nextPageURL ? "#888" : "#ffffff",
-                        border: "none",
-                        borderRadius: "6px",
-                        cursor: !nextPageURL ? "not-allowed" : "pointer"
-                    }}
-                >
-                    Next
-                </button>
+              
+          
             </div>
         </div>
     );

@@ -40,12 +40,12 @@ function UserForm() {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             });
-
+console.log(res.data )
             if (res.data.status === 200) {
                 toast.success("User added successfully");
                 resetForm();
             } else {
-                toast.error("Failed to add user");
+                toast.error(res.data.message);
             }
         } catch (error) {
             toast.error("Error submitting form");

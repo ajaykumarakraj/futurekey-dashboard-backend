@@ -442,3 +442,7 @@ button:hover {
   font-size: 22px;       /* emoji size */
   box-shadow: inset 0 0 0 1px #e5e7eb;
 }
+.loginstatus{
+        display: flex;
+    gap: 10px;
+}

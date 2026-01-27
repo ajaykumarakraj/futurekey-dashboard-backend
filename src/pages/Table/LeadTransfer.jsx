@@ -4,112 +4,117 @@ import api from "../../component/api";
 import moment from "moment";
 import axios from "axios";
 import { useAuth } from "../../component/AuthContext";
+
 const LeadTransfer = () => {
-   const { user } = useAuth()
-    const [selectedLeads, setSelectedLeads] = useState([]);
-const [filters, setFilters] = useState({
+  const { user } = useAuth();
+  const [selectedLeads, setSelectedLeads] = useState([]);
+  const [filters, setFilters] = useState({
     teamLeaderId: "",
     agentId: "",
     projectId: "",
-      dateFrom: "",
+    dateFrom: "",
     dateTo: "",
-    status:""
+    status: ""
   });
-  // 🔁 Transfer filters
-const [transferFilters, setTransferFilters] = useState({
-  teamLeaderId: "",
-  agentId: "",
-  transferstatus:""
-});
+  const [transferFilters, setTransferFilters] = useState({
+    teamLeaderId: "",
+    agentId: "",
+    transferstatus: ""
+  });
   const [data, setData] = useState([]);
-const [agentstransfer,setAgentstransfer]=useState([])
+  const [agentsTransfer, setAgentsTransfer] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  // const [totalRecords, setTotalRecords] = useState(0);
-   const [teamLeaders, setTeamLeaders] = useState([]);
-    const [teamLeadertransfer, setTeamLeadertransfer] = useState([]);
+  const [teamLeaders, setTeamLeaders] = useState([]);
   const [agents, setAgents] = useState([]);
-    const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const rowsPerPage = 50;
 
-//start search section all data 
- useEffect(() => {
+  // Fetch initial data
+  useEffect(() => {
     fetchTeamLeaders();
     fetchProjects();
-    
   }, []);
-const fetchTeamLeaders = async () => {
+
+  const fetchTeamLeaders = async () => {
+    setLoading(true);
     try {
       const res = await axios.get("https://api.almonkdigital.in/api/admin/get-team-leader", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setTeamLeaders(res.data.data);
-      
-      console.log(res.data.data)
     } catch (err) {
-      console.error("Team Leader fetch error:", err);
+      setErrorMessage("Failed to fetch team leaders.");
+    } finally {
+      setLoading(false);
     }
   };
- const handleTeamLeaderChange = async (e) => {
+
+  const handleTeamLeaderChange = async (e) => {
     const id = e.target.value;
     setFilters(prev => ({ ...prev, teamLeaderId: id }));
+    setLoading(true);
     try {
       const res = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setAgents(res.data.data);
-        // console.log(res.data.data)
     } catch (err) {
-      console.error("Agent fetch error:", err);
+      setErrorMessage("Failed to fetch agents.");
+    } finally {
+      setLoading(false);
     }
   };
- 
-  
- const fetchProjects = async () => {
+
+  const fetchProjects = async () => {
+    setLoading(true);
     try {
       const res = await axios.get("https://api.almonkdigital.in/api/admin/view-master-setting", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-     
       const projectList = res.data.data.filter(item => item.cat_name === "Project");
-
       setProjects(projectList);
-      //  const leadsource = res.data.data.filter(item => item.cat_name === "Lead Source");
-      //  setLeadSource(leadsource)
-
     } catch (err) {
-      console.error("Project fetch error:", err);
+      setErrorMessage("Failed to fetch projects.");
+    } finally {
+      setLoading(false);
     }
   };
- const handleAgentChange = (e) => {
+
+  const handleAgentChange = (e) => {
     setFilters(prev => ({ ...prev, agentId: e.target.value }));
   };
- 
+
   const handleProjectChange = (e) => {
     setFilters(prev => ({ ...prev, projectId: e.target.value }));
   };
-const handleStatus = (e) => {
+
+  const handleStatus = (e) => {
     setFilters(prev => ({ ...prev, status: e.target.value }));
   };
-const getsearchdata=async(page = 1)=>{
-  if (!filters.teamLeaderId) return alert("Please select a Team Leader first.");
 
-    const payload={
-    tl_id:filters.teamLeaderId,
-    agent_id:filters.agentId,
-    lead_status:filters.status,
-    project:filters.projectId,
-    from_date:filters.dateFrom,
-    to_date:filters.dateTo
+  const getsearchdata = async (page = 1) => {
+    if (!filters.teamLeaderId) {
+      setErrorMessage("Please select a Team Leader first.");
+      return;
     }
-  // console.log("post data",payload)
-try {
-  const res=await axios.post("https://api.almonkdigital.in/api/admin/search-agent-data",payload,{  
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }    
-  })
-  // console.log("search data",res.data.data)
- const result = res?.data?.data;
-      // console.log(result)
+    setLoading(true);
+    setErrorMessage("");
+    const payload = {
+      tl_id: filters.teamLeaderId,
+      agent_id: filters.agentId,
+      lead_status: filters.status,
+      project: filters.projectId,
+      from_date: filters.dateFrom,
+      to_date: filters.dateTo
+    };
+    try {
+      const res = await axios.post("https://api.almonkdigital.in/api/admin/search-agent-data", payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      const result = res?.data?.data;
       if (res.status === 200 && Array.isArray(result)) {
         const mapped = result.map((item, index) => ({
           id: (page - 1) * rowsPerPage + index + 1,
@@ -129,82 +134,82 @@ try {
           lastUpdate: moment(item.updated_at).utcOffset("+05:30").format("DD/MM/YYYY, hh:mm A"),
           observation: item.remark,
         }));
-
         setData(mapped);
         setCurrentPage(res.data.meta?.current_page || 1);
         setTotalPages(res.data.meta?.last_page || 1);
-        // setTotalRecords(res.data.meta?.total || 0);
       } else {
         setData([]);
       }
-  
-} catch (error) {
-  console.log(error)
-}
-}
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }))
+    } catch (error) {
+      setErrorMessage("Failed to fetch search data.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-// end search data section 
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
 
-
-
-// fransfer lead  section
-
-const handleTransferTLChange = async (e) => {
+  // Transfer section
+  const handleTransferTLChange = async (e) => {
     const id = e.target.value;
     setTransferFilters(prev => ({ ...prev, teamLeaderId: id }));
+    setLoading(true);
     try {
       const res = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      setAgentstransfer(res.data.data);
-        // console.log(res.data.data)
+      setAgentsTransfer(res.data.data);
     } catch (err) {
-      console.error("Agent fetch error:", err);
+      setErrorMessage("Failed to fetch agents for transfer.");
+    } finally {
+      setLoading(false);
     }
   };
- 
-const handleTransferAgentChange = (e) => {
-  setTransferFilters(prev => ({ ...prev, agentId: e.target.value }));
-};
 
-const handleTransferStatus = (e) => {
+  const handleTransferAgentChange = (e) => {
+    setTransferFilters(prev => ({ ...prev, agentId: e.target.value }));
+  };
+
+  const handleTransferStatus = (e) => {
     setTransferFilters(prev => ({ ...prev, transferstatus: e.target.value }));
   };
 
-
-   const handleTransfer = async () => {
-    if (!transferFilters.teamLeaderId) return alert("Please select a Team Leader first.");
- const payload = {
-  lead_id: selectedLeads,
-  to_tl_id: transferFilters.teamLeaderId,
-  to_agent_id: transferFilters.agentId,
-  lead_status:transferFilters.transferstatus,
-  user_id: user.user_id,
-};
-
-    console.log("check", payload)
-    // try {
-    //   const res = await api.post("/transfer-agent-lead", payload, {
-    //     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    //   });
-    //   // console.log(res)
-    //   if (res?.status === 200) {
-    //     alert("Leads transferred!");
-    //     setSelectedLeads([]);
-    //     fetchLeads(currentPage);
-    //   } else {
-    //     alert("Transfer failed.");
-    //   }
-    // } catch (err) {
-    //   console.error("Transfer error:", err);
-    //   alert("Something went wrong.");
-    // }
+  const handleTransfer = async () => {
+    if (!transferFilters.teamLeaderId) {
+      alert("Please select a Team Leader for transfer.");
+      return;
+    }
+    setLoading(true);
+    setErrorMessage("");
+    const payload = {
+      lead_id: selectedLeads,
+      to_tl_id: transferFilters.teamLeaderId,
+      to_agent_id: transferFilters.agentId,
+      lead_status: transferFilters.transferstatus,
+      user_id: user.user_id,
+    };
+    console.log(payload)
+    try {
+      const res = await api.post("/transfer-agent-lead", payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      if (res?.status === 200) {
+        alert("Leads transferred successfully!");
+        setSelectedLeads([]);
+        getsearchdata(currentPage);
+      } else {
+        setErrorMessage("Transfer failed.");
+      }
+    } catch (err) {
+      setErrorMessage("Something went wrong during transfer.");
+    } finally {
+      setLoading(false);
+    }
   };
-  // fransfer lead  section end
+
   const columns = [
     {
       field: "select",
@@ -213,17 +218,17 @@ const handleTransferStatus = (e) => {
           type="checkbox"
           checked={data.length && selectedLeads.length === data.length}
           onChange={(e) =>
-            setSelectedLeads(e.target.checked ? data.map(row => row.id) : [])
+            setSelectedLeads(e.target.checked ? data.map(row => row.customerId) : [])
           }
         />
       ),
       renderCell: (row) => (
         <input
           type="checkbox"
-          checked={selectedLeads.includes(row.id)}
+          checked={selectedLeads.includes(row.customerId)}
           onChange={(e) => {
             setSelectedLeads(prev =>
-              e.target.checked ? [...prev, row.id] : prev.filter(id => id !== row.id)
+              e.target.checked ? [...prev, row.customerId] : prev.filter(id => id !== row.customerId)
             );
           }}
         />
@@ -257,76 +262,91 @@ const handleTransferStatus = (e) => {
     { field: "leadstatus", headerName: "Lead Status", align: "center" },
     { field: "observation", headerName: "Observation", align: "left" },
   ];
+
   const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) fetchLeads(page);
+    if (page >= 1 && page <= totalPages) getsearchdata(page);
   };
+
   function getPageNumbers(currentPage, totalPages) {
     const pageNumbers = [];
-
     const start = Math.max(1, currentPage - 2);
     const end = Math.min(totalPages, currentPage + 2);
-
     for (let i = start; i <= end; i++) {
       pageNumbers.push(i);
     }
     return pageNumbers;
   }
-console.log("leader",teamLeadertransfer)
+
   return (
     <div>
-      <h2 className="mb-2 text-center textsize headingstyle">Lead Transfer </h2>
+      <h2 className="mb-2 text-center textsize headingstyle">Lead Transfer</h2>
+      {errorMessage && <p style={{ color: "red", textAlign: "center" }}>{errorMessage}</p>}
+      {loading && <p style={{ textAlign: "center" }}>Loading...</p>}
+
       {/* Filter Section */}
       <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-         <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
-          <option value="">Select Team Leader</option>
-          {teamLeaders.map(tl => (
-            <option key={tl.user_id} value={tl.user_id}>{tl.name}</option>
-          ))}
-        </select>
+          <label>
+        
+            <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
+              <option value="">Select Team Leader</option>
+              {teamLeaders.map(tl => (
+                <option key={tl.user_id} value={tl.user_id}>{tl.name}</option>
+              ))}
+            </select>
+          </label>
 
-          <select onChange={handleAgentChange} value={filters.agentId}>
-          <option value="">Select Agent</option>
-          {agents.map(a => (
-            <option key={a.id} value={a.id}>{a.name}</option>
-          ))}
-        </select>
+          <label>
+        
+            <select onChange={handleAgentChange} value={filters.agentId}>
+              <option value="">Select Agent</option>
+              {agents.map(a => (
+                <option key={a.id} value={a.id}>{a.name}</option>
+              ))}
+            </select>
+          </label>
 
-    
-  <select onChange={handleStatus} >
-          <option value="">Select Leads Status</option>
-          <option  value="1">New Lead</option>
-            <option  value="11">Reassign Leads</option>
-            <option  value="2">In Progress Leads</option>
-            <option  value="3">Hot Leads</option>
-            <option  value="0">Fresh Leads</option>
-            <option  value="4">Archived Leads</option>
-            <option  value="5">Converted Leads</option>
-        </select>
-          <select onChange={handleProjectChange} value={filters.projectId}>
-          <option value="">Select Project</option>
-          {projects.map(p => (
-            <option key={p.cat_value} value={p.cat_value}>{p.cat_value}</option>
-          ))}
-        </select>
+          <label>
+           
+            <select onChange={handleStatus} value={filters.status}>
+              <option value="">Select Lead Status</option>
+              <option value="1">New Lead</option>
+              <option value="11">Reassign Leads</option>
+              <option value="2">In Progress Leads</option>
+              <option value="3">Hot Leads</option>
+              <option value="0">Fresh Leads</option>
+              <option value="4">Archived Leads</option>
+              <option value="5">Converted Leads</option>
+            </select>
+          </label>
 
-    
+          <label>
+           
+            <select onChange={handleProjectChange} value={filters.projectId}>
+              <option value="">Select Project</option>
+              {projects.map(p => (
+                <option key={p.cat_value} value={p.cat_value}>{p.cat_value}</option>
+              ))}
+            </select>
+          </label>
 
-          <input name="dateFrom" type="date" placeholder="From" value={filters.dateFrom} onChange={handleFilterChange} />
-          <input name="dateTo" type="date" placeholder="To"  value={filters.dateTo} onChange={handleFilterChange} />
+         
+            <input name="dateFrom" type="date" value={filters.dateFrom} onChange={handleFilterChange} />
+        
 
-     
+         
+            <input name="dateTo" type="date" value={filters.dateTo} onChange={handleFilterChange} />
+        
 
-          <button type="button" onClick={() => getsearchdata(1)}>Search</button>
+          <button type="button" className="search-btn" onClick={() => getsearchdata(1)}>Search</button>
         </form>
       </div>
 
       {/* Table Section */}
       <Example data={data} columns={columns} rowsPerPageOptions={[50]} />
 
-      {/* Enhanced Pagination Section */}
+      {/* Pagination Section */}
       <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-        {/* Prev Button */}
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage <= 1}
@@ -335,7 +355,6 @@ console.log("leader",teamLeadertransfer)
           Prev
         </button>
 
-        {/* Numbered Pages */}
         {getPageNumbers(currentPage, totalPages).map((page) => (
           <button
             key={page}
@@ -346,7 +365,6 @@ console.log("leader",teamLeadertransfer)
           </button>
         ))}
 
-        {/* Next Button */}
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
@@ -356,45 +374,53 @@ console.log("leader",teamLeadertransfer)
         </button>
       </div>
 
-<div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
+      {/* Transfer Section */}
+      <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px",marginTop:"20px" }}>
+        <p>Select For Transfer Leads</p>
         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-       <select value={transferFilters.teamLeaderId} onChange={handleTransferTLChange}>
+          <label>
+        
+            <select value={transferFilters.teamLeaderId} onChange={handleTransferTLChange}>
+              <option value="">Select Team Leader</option>
+              {teamLeaders.map(tl => (
+                <option key={tl.user_id} value={tl.user_id}>{tl.name}</option>
+              ))}
+            </select>
+          </label>
 
-          <option value="">Select Team Leader</option>
-          {teamLeaders.map(tl => (
-            <option key={tl.user_id} value={tl.user_id}>{tl.name}</option>
-          ))}
-        </select>
+          <label>
+        
+            <select onChange={handleTransferAgentChange} value={transferFilters.agentId}>
+              <option value="">Select Agent</option>
+              {agentsTransfer.map(a => (
+                <option key={a.id} value={a.id}>{a.name}</option>
+              ))}
+            </select>
+          </label>
 
-          <select onChange={handleTransferAgentChange} value={transferFilters.agentId}>
-          <option value="">Select Agent</option>
-          {agentstransfer.map(a => (
-            <option key={a.id} value={a.id}>{a.name}</option>
-          ))}
-        </select>
+          <label>
+          
+            <select onChange={handleTransferStatus} value={transferFilters.transferstatus}>
+              <option value="">Select Lead Status</option>
+              <option value="1">New Lead</option>
+              <option value="11">Reassign Leads</option>
+              <option value="2">In Progress Leads</option>
+              <option value="3">Hot Leads</option>
+              <option value="0">Fresh Leads</option>
+              <option value="4">Archived Leads</option>
+              <option value="5">Converted Leads</option>
+            </select>
+          </label>
 
-    
-  <select onChange={handleTransferStatus} >
-          <option value="">Select Leads Status</option>
-          <option  value="1">New Lead</option>
-            <option  value="11">Reassign Leads</option>
-            <option  value="2">In Progress Leads</option>
-            <option  value="3">Hot Leads</option>
-            <option  value="0">Fresh Leads</option>
-            <option  value="4">Archived Leads</option>
-            <option  value="5">Converted Leads</option>
-        </select>
-
-
-         {selectedLeads.length > 0 && (
-          <p onClick={handleTransfer} style={{ padding: "5px 10px", borderRadius: 5, background: "#28a745", color: "#fff" }}>
-            Transfer Selected Leads
-          </p>
-        )}
-</form>
-</div>
+          {selectedLeads.length > 0 && (
+            <p onClick={handleTransfer} style={{ padding: "5px 10px", borderRadius: 5, background: "#28a745", color: "#fff", border: "none" }}>
+              Transfer Selected Leads
+            </p>
+          )}
+        </form>
+      </div>
     </div>
-  )
+  );
 };
 
 export default LeadTransfer;

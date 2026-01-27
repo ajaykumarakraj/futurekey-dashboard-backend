@@ -43,3 +43,20 @@ input {
   padding: 5px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+.search-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.search-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.3);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.search-btn:active::after {
+  opacity: 1;
+}

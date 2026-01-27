@@ -180,9 +180,12 @@ const CreateForm = () => {
       setAltnumber("");
       setNumber("");
       setRemark("");
+window.location.reload();
+
+
 
     } catch (error) {
-      toast.error("Failed to add client. Try again.");
+      toast.error("Failed to add client. Try again.",error);
     }
   };
   // console.log("check", user)

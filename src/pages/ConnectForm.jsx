@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import api from '../component/api';
+import imgad from "../assets/images/delete.png"
 import { useAuth } from '../component/AuthContext';
+import Swal from 'sweetalert2';
 const ConnectForm = () => {
     const { user } = useAuth()
     // get data 
@@ -44,6 +48,7 @@ const ConnectForm = () => {
                 }
             })
             if (res.data.status === 200) {
+                console.log(res.data.data)
                 setTableData(res.data.project_data)
                 setPage(res.data.data)
             }
@@ -96,7 +101,42 @@ const ConnectForm = () => {
             console.log(error)
         }
     }
-    // console.log(user.user_id)
+
+
+// delete api call 
+
+const handleDelete = async (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const delres = await api.get(`/delete-form/${id}`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+
+                    if (delres.data.status === 200) {
+                        toast.error(delres.data.message);
+                       
+             
+                        GetDatafun();
+                    }
+                } catch (error) {
+                    toast.error("Something went wrong.");
+                }
+            }
+        });
+    };
+
+    console.log(tableData)
     return (
         <div className="container mt-5">
             <h3 className="mb-4 text-center">Connect Form</h3>
@@ -156,6 +196,7 @@ const ConnectForm = () => {
                             <th style={styles.th}>Page Name</th>
                             <th style={styles.th}>Form Name</th>
                             <th style={styles.th}>Project Name</th>
+                            <th style={styles.th}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -166,6 +207,7 @@ const ConnectForm = () => {
                                     <td style={styles.td}>{value.page_name}</td>
                                     <td style={styles.td}>{value.form_name}</td>
                                     <td style={styles.td}>{value.project_name}</td>
+                                     <td style={styles.td} ><img onClick={() => handleDelete(value.id)} style={styles.imgcur} src={imgad} /></td>
                                 </tr>
                             ))
                         }
@@ -176,6 +218,7 @@ const ConnectForm = () => {
                     </tbody>
                 </table>
             </div>
+             <ToastContainer />
         </div>
     );
 };
