@@ -3,8 +3,9 @@ import api from "../../component/api";
 import Example from "./Example";
 import moment from "moment";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 const NewLead = () => {
- 
+ const [searchParams] = useSearchParams();
  const [filters, setFilters] = useState({
     teamLeaderId: "",
     agentId: "",
@@ -22,8 +23,12 @@ const [agents, setAgents] = useState([]);
   const [projects, setProjects] = useState([]);
   // const [leadSource,setLeadSource]=useState([])
 
+const tl = searchParams.get("tl");
+const agent = searchParams.get("agent");
+const project = searchParams.get("project");
 
-   const rowsPerPage = 10;
+console.log("get data",tl,agent,project)
+   const rowsPerPage = 50;
 
 
 
@@ -40,7 +45,7 @@ const fetchTeamLeaders = async () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setTeamLeaders(res.data.data);
-      // console.log(res.data.data)
+      console.log(res.data.data)
     } catch (err) {
       console.error("Team Leader fetch error:", err);
     }
@@ -53,7 +58,7 @@ const fetchTeamLeaders = async () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setAgents(res.data.data);
-        // console.log(res.data.data)
+        console.log(res.data.data)
     } catch (err) {
       console.error("Agent fetch error:", err);
     }
@@ -85,7 +90,7 @@ const handleStatus = (e) => {
   };
 const getsearchdata=async(page = 1)=>{
   if (!filters.teamLeaderId) return alert("Please select a Team Leader first.");
-
+ if (!filters.agentId) return alert("Please select a Agent.");
     const payload={
     tl_id:filters.teamLeaderId,
     agent_id:filters.agentId,
@@ -136,14 +141,6 @@ try {
 }
 // end search data section 
 
-
-// console.log(teamLeaders[0].user_id)
-
-
-
-
-
- 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -151,7 +148,8 @@ try {
 
   const handleSearch = async (page = 1) => {
     try {
-      const payload = { lead_status: "1", page };
+      const payload = { lead_status: "1", page,tl_id:tl,agent_id:agent,project:project };
+      console.log(payload)
       const token = localStorage.getItem("token");
 
       const res = await api.post("/get-lead-data", payload, {
@@ -159,7 +157,7 @@ try {
       });
 
       const result = res?.data?.data;
-      // console.log("get lead dataa",result)
+      console.log("get lead dataa",result)
       if (res.status === 200 && Array.isArray(result)) {
         const mapped = result.map((item, index) => ({
           id: (page - 1) * rowsPerPage + index + 1,
@@ -274,7 +272,7 @@ try {
             <option  value="11">Reassign Leads</option>
             <option  value="2">In Progress Leads</option>
             <option  value="3">Hot Leads</option>
-            <option  value="0">Fresh Leads</option>
+           
             <option  value="4">Archived Leads</option>
             <option  value="5">Converted Leads</option>
         </select>

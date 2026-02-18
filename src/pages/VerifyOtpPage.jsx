@@ -26,7 +26,8 @@ const VerifyOtpPage = () => {
                 otp,
             });
 
-            if (res.data.status === 200) {
+            if (res.data.status === 200 &&  res.data.data.role=="Admin") {
+                console.log(res.data.data.role)
                 const token = res.data.token;
                 const user = res.data.data;
 

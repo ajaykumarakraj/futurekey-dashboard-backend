@@ -4,7 +4,9 @@ import api from "../../component/api";
 import moment from "moment";
 import { useAuth } from "../../component/AuthContext";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 const InProgressLead = () => {
+   const [searchParams] = useSearchParams();
 const [filters, setFilters] = useState({
     teamLeaderId: "",
     agentId: "",
@@ -20,6 +22,9 @@ const [filters, setFilters] = useState({
    const [teamLeaders, setTeamLeaders] = useState([]);
   const [agents, setAgents] = useState([]);
     const [projects, setProjects] = useState([]);
+    const tl = searchParams.get("tl");
+const agent = searchParams.get("agent");
+const project = searchParams.get("project");
   const rowsPerPage = 50;
 //start search section all data 
  useEffect(() => {
@@ -139,7 +144,7 @@ try {
       const payload = {
         lead_status: "2",
         page,
-        ...filters,
+        tl_id:tl,agent_id:agent,project:project,
       };
       const res = await api.post("/get-lead-data", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -266,7 +271,7 @@ try {
             <option  value="11">Reassign Leads</option>
             <option  value="2">In Progress Leads</option>
             <option  value="3">Hot Leads</option>
-            <option  value="0">Fresh Leads</option>
+         
             <option  value="4">Archived Leads</option>
             <option  value="5">Converted Leads</option>
         </select>

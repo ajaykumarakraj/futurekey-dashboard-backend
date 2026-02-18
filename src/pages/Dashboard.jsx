@@ -4,42 +4,103 @@ import { useAuth } from "../component/AuthContext";
 import api from "../component/api";
 import "../app.css";
 
-import {
-  FiUserPlus,
-  FiRefreshCcw,
-  FiClock,
-  FiTrendingUp,
-  FiPhoneCall,
-  FiAlertTriangle,
-  FiMapPin,
-  FiCalendar,
-  FiLayers,
-  FiStar,
-  FiArchive,
-  FiCheckCircle,
-} from "react-icons/fi";
+import axios from "axios";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+   const [filters, setFilters] = useState({
+      teamLeaderId: "",
+      agentId: "",
+      projectId: "",
+      //   dateFrom: "",
+      // dateTo: "",
+      // status:""
+    });
   const { user, token } = useAuth();
   const [data, setData] = useState({});
-
-  useEffect(() => {
-    fetchDashboardData();
-  }, [user, token]);
-
-  const fetchDashboardData = async () => {
+   const [teamLeaders, setTeamLeaders] = useState([]);
+  const [agents, setAgents] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [leadSource,setLeadSource]=useState([])
+//start search section all data 
+ useEffect(() => {
+    fetchTeamLeaders();
+    fetchProjects();
+    getsearchdata()
+      // handleSearch(1);
+    // fetchLeads(1);
+  }, []);
+const fetchTeamLeaders = async () => {
     try {
-      const res = await api.get(`/get-home-screen-data`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await axios.get("https://api.almonkdigital.in/api/admin/get-team-leader", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      if (res.data.status === 200) {
-        setData(res.data.data || {});
-      }
-    } catch (error) {
-      console.error(error);
+      setTeamLeaders(res.data.data);
+      console.log(res.data.data)
+    } catch (err) {
+      console.error("Team Leader fetch error:", err);
     }
   };
+ const handleTeamLeaderChange = async (e) => {
+    const id = e.target.value;
+    setFilters(prev => ({ ...prev, teamLeaderId: id }));
+    try {
+      const res = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      setAgents(res.data.data);
+        console.log(res.data.data)
+    } catch (err) {
+      console.error("Agent fetch error:", err);
+    }
+  };
+ const fetchProjects = async () => {
+    try {
+      const res = await axios.get("https://api.almonkdigital.in/api/admin/view-master-setting", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+     
+      const projectList = res.data.data.filter(item => item.cat_name === "Project");
+
+      setProjects(projectList);
+       const leadsource = res.data.data.filter(item => item.cat_name === "Lead Source");
+       setLeadSource(leadsource)
+
+    } catch (err) {
+      console.error("Project fetch error:", err);
+    }
+  };
+ const handleAgentChange = (e) => {
+    setFilters(prev => ({ ...prev, agentId: e.target.value }));
+  };
+  const handleProjectChange = (e) => {
+    setFilters(prev => ({ ...prev, projectId: e.target.value }));
+  };
+ // useEffect(() => {
+  //   fetchDashboardData();
+  // }, [user, token]);
+const getsearchdata=async(page = 1)=>{
+    const payload={
+    tl_id:filters.teamLeaderId||"",
+    agent_id:filters.agentId||"",   
+    project:filters.projectId||"",
+
+    }
+  console.log("post data",payload)
+try {
+  const res=await axios.post("https://api.almonkdigital.in/api/admin/get-home-screen-data",payload,{  
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }    
+  })
+  console.log("get data",res.data.data)
+ setData(res.data.data || {});
+     
+  
+} catch (error) {
+  console.log(error)
+}
+}
+// end search data section 
+
 
 const cards = [
   { title: "New Leads", key: "new_lead", path: "/leads/new", icon: "👥" },
@@ -62,13 +123,49 @@ const cards = [
         <h2>Sales Dashboard</h2>
         <p>Overview of lead activities</p>
       </div>
+{/* Filters */}
+      <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
+        <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+         <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
+          <option value="">Select Team Leader</option>
+          {teamLeaders.map(tl => (
+            <option key={tl.user_id} value={tl.user_id}>{tl.name}</option>
+          ))}
+        </select>
 
+          <select onChange={handleAgentChange} value={filters.agentId}>
+          <option value="">Select Agent</option>
+          {agents.map(a => (
+            <option key={a.id} value={a.id}>{a.name}</option>
+          ))}
+        </select>
+
+          {/* <select name="leadSource" value={filters.leadSource} onChange={handleFilterChange}>
+            <option value="">Lead Source</option>
+     {leadSource.map(p => (
+            <option key={p.cat_value} value={p.cat_value}>{p.cat_value}</option>
+          ))}
+          </select> */}
+ 
+          <select onChange={handleProjectChange} value={filters.projectId}>
+          <option value="">Select Project</option>
+          {projects.map(p => (
+            <option key={p.cat_value} value={p.cat_value}>{p.cat_value}</option>
+          ))}
+        </select>
+
+
+
+          <button type="button" onClick={() => getsearchdata(1)}>Search</button>
+        </form>
+      </div>
      <div className="card-grid">
   {cards.map((card, index) => (
     <div
       key={index}
       className="pro-card"
-      onClick={() => navigate(card.path)}
+      onClick={() => navigate(`${card.path}?tl=${filters.teamLeaderId}&agent=${filters.agentId}&project=${filters.projectId}`)}
+
     >
       <div className="emoji-icon">
         {card.icon}

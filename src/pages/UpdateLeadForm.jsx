@@ -5,11 +5,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import api from "../component/api";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../app.css"
+import Swal from 'sweetalert2';
 import { useParams } from "react-router-dom";
 import { useAuth } from "../component/AuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-const UpdateCreateForm = () => {
+const UpdateLeadForm = () => {
 
     const { user, token } = useAuth()
     const { id } = useParams();
@@ -276,6 +277,38 @@ const UpdateCreateForm = () => {
         }
     };
 
+// remove notes api 
+
+const handelremovenote=async(e)=>{
+    console.log("run fun")
+ e.preventDefault();
+
+
+    Swal.fire({
+               title: 'Are you sure?',
+               text: "You won't be able to revert this!",
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#d33',
+               cancelButtonColor: '#3085d6',
+               confirmButtonText: 'Yes, delete it!',
+           }).then(async (result) => {
+               if (result.isConfirmed) { try {
+const res=await axios.get(`https://api.almonkdigital.in/api/admin/remove-notes/${id}`,{
+    headers:{
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+    }
+})
+if(res.data.status==200){
+    toast.success(res.data.message)
+    window.location.reload();
+}
+} catch (error) {
+    console.log(error)
+}
+               }
+            })
+}
     // console.log("check", getnote)
     // console.log("check", getnote)
     return (
@@ -558,11 +591,15 @@ const UpdateCreateForm = () => {
                     </div>
                 </div>
 
-                <button className="btn btn-primary " type="submit">Save</button>
+              <div className="notebtn">
+                  <button className="btn btn-primary " type="submit">Save</button>
+                   <button className="btn bg-danger text-white  " onClick={handelremovenote}>Remove Notes</button>
+              </div>
             </form>
+           
             <ToastContainer />
         </div>
     );
 };
 
-export default UpdateCreateForm;
+export default UpdateLeadForm;

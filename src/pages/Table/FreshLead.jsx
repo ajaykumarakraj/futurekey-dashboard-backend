@@ -4,15 +4,18 @@ import axios from "axios";
 import Example from "./Example";
 import "../../app.css";
 import moment from "moment";
+import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../component/AuthContext";
 
 const FreshLead = () => {
+   const [searchParams] = useSearchParams();
   const { user } = useAuth()
   const [data, setData] = useState([]);
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [teamLeaders, setTeamLeaders] = useState([]);
   const [agents, setAgents] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [search,setSearch]=useState("")
   const [filters, setFilters] = useState({
     teamLeaderId: "",
     agentId: "",
@@ -20,6 +23,10 @@ const FreshLead = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const tl = searchParams.get("tl");
+const agent = searchParams.get("agent");
+const project = searchParams.get("project");
+// console.log("test",search)
   const rowsPerPage = 50;
 
   useEffect(() => {
@@ -72,14 +79,51 @@ const FreshLead = () => {
     setFilters(prev => ({ ...prev, projectId: e.target.value }));
   };
 
+// search data by project 
+  const handleSearch  = (e) => {
+    setSearch( e.target.value);
+  };
+ const getsearchdata = async (page = 1) => {
+    try {
+      const payload = {
+        // lead_status: "0",
+        page,
+       project:search
+      };
+console.log(payload)
+      const res = await api.post("/fresh-lead-filter", payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+
+      const list = res?.data?.data || [];
+      const meta = res?.data?.meta;
+
+      const mapped = list.map((item, index) => ({
+        serialNO: (page - 1) * rowsPerPage + index + 1,
+        id: item.id,
+        customerId: item.cust_id,
+        enterDate: moment(item.created_at).utcOffset('+05:30').format('DD/MM/YYYY, hh:mm A'),
+        contactPerson: item.name,
+        contactNumber: item.contact,
+        city: item.city,
+        leadSource: item.lead_source,
+        project: item.form_name,
+      }));
+
+      setData(mapped);
+      setCurrentPage(meta?.current_page || 1);
+      setTotalPages(meta?.last_page || 1);
+    } catch (err) {
+      console.error("Lead fetch error:", err);
+    }
+  };
+//End search data by project 
   const fetchLeads = async (page = 1) => {
     try {
       const payload = {
         lead_status: "0",
         page,
-        team_leader_id: filters.teamLeaderId,
-        agent_id: filters.agentId,
-        project_id: filters.projectId
+       tl_id:tl,agent_id:agent,project:project
       };
 
       const res = await api.post("/get-lead-data", payload, {
@@ -187,7 +231,19 @@ const FreshLead = () => {
 
     <div >
       <h2 className="mb-2 text-center textsize headingstyle">Fresh Leads</h2>
-      <div style={{ background: "#eee", padding: 15, borderRadius: 6, marginBottom: 15, display: "flex", gap: 10 }}>
+    <form>
+      <div style={{ background: "#eee", padding: 15, borderRadius: 6, marginBottom: 15, display: "flex", justifyContent: "space-between" }}>
+        <div style={{display:"flex",gap:10}}>
+          <select onChange={handleSearch} value={search}>
+          <option value="">Select Project</option>
+          {projects.map(p => (
+            <option key={p.cat_value} value={p.cat_value}>{p.cat_value}</option>
+          ))}
+        </select>
+          <button type="button" className="search-btn" onClick={() => getsearchdata(1)}>Search</button>
+      </div>
+<div style={{display:"flex",gap:10, alignItems: "center"}}>
+  <p className="mb-0" style={{fontSize:12}}>Assign To</p>
         <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
           <option value="">Select Team Leader</option>
           {teamLeaders.map(tl => (
@@ -214,6 +270,7 @@ const FreshLead = () => {
             Transfer Selected Leads
           </button>
         )}
+        </div>
       </div>
 
       <Example data={data} columns={columns} rowsPerPageOptions={[rowsPerPage]} />
@@ -231,6 +288,7 @@ const FreshLead = () => {
         ))}
         <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPages}>Next</button>
       </div>
+      </form>
     </div>
   );
 };

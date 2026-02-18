@@ -27,7 +27,7 @@ import ScheduledSiteLead from './pages/Table/ScheduledSiteLead';
 import TodayFollow from './pages/Table/TodayFollow';
 import TodaySiteVisit from './pages/Table/TodaySiteVisit';
 import TommorowSiteVisit from './pages/Table/TommorowSiteVisit';
-import UpdateCreateForm from './pages/UpdateCreateForm';
+import UpdateLeadForm from './pages/UpdateLeadForm';
 import ConnectForm from './pages/ConnectForm';
 import Reassign from './pages/Table/Reassign';
 import LeadTransfer from './pages/Table/LeadTransfer';
@@ -69,7 +69,7 @@ const App = () => {
         <Route path="/user/table" element={<UserMangementTable />} />
         <Route path="/user/form" element={<UserForm />} />
         <Route path="/user/update/:id" element={<UpdateUserForm />} />
-        <Route path="/lead-update/:id" element={<UpdateCreateForm />} />
+        <Route path="/lead-update/:id" element={<UpdateLeadForm />} />
         <Route path="/table" element={<CustomTable />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/support" element={<ContactSupport />} />

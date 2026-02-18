@@ -10,7 +10,9 @@
 h5 {
     font-size: 14px !important;
 }
-
+.Mergebtn{
+        font-size: 12px !important;
+}
 .formstart {
     display: grid;
     grid-template-columns: 50% 50%;
@@ -56,7 +58,7 @@ input {
 .custom-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .custom-table th,
@@ -445,4 +447,8 @@ button:hover {
 .loginstatus{
         display: flex;
     gap: 10px;
+}
+.notebtn{
+display: flex;
+    justify-content: space-between;
 }

@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import api from '../component/api';
 import imgad from "../assets/images/delete.png"
 import { useAuth } from '../component/AuthContext';
+import '../app.css';
 import Swal from 'sweetalert2';
 const ConnectForm = () => {
     const { user } = useAuth()
@@ -102,7 +103,37 @@ const ConnectForm = () => {
         }
     }
 
+// merge api 
+const mergeForm = async () => {
+   Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Merge it!',
+        }).then(async (result) => {
+            if (result.isConfirmed){
+     try {
+    const res = await axios.get(
+      "https://api.almonkdigital.in/api/refresh-token"
+    );
 
+  
+
+    if (res.data.status === 200) {
+      toast.success(res.data.message);
+    } else {
+      toast.error(res.data.message);
+    }
+
+  } catch (error) {
+    toast.error("Something went wrong");
+  }
+ }
+  })
+};
 // delete api call 
 
 const handleDelete = async (id) => {
@@ -140,7 +171,9 @@ const handleDelete = async (id) => {
     return (
         <div className="container mt-5">
             <h3 className="mb-4 text-center">Connect Form</h3>
-
+  <div className="mb-3">
+                    <button type='button' className='btn Mergebtn' onClick={mergeForm}>Merge Form</button>
+                </div>
             {/* Form Section */}
             <form className="row g-3 mb-4">
                 <div className="col-md-3">
