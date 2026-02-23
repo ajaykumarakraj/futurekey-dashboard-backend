@@ -48,7 +48,7 @@ export default function MiniDrawer() {
             ☰
           </button> */}
           <h1 style={{ margin: '0', fontSize: '1.5rem' }}>
-            FUTUREKEY HOMES PVT LTD.</h1>
+            ALMONK CRM</h1>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           {/* User Profile or icon can go here */}

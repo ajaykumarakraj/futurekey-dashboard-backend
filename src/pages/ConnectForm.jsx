@@ -117,7 +117,7 @@ const mergeForm = async () => {
             if (result.isConfirmed){
      try {
     const res = await axios.get(
-      "https://api.almonkdigital.in/api/refresh-token"
+      "https://api.almonkdigital.in/api/merge-form"
     );
 
   
