@@ -77,7 +77,7 @@ const CreateForm = () => {
   }
   const teamLeaderfn = async () => {
     try {
-      const teamleaderres = await axios.get("https://api.almonkdigital.in/api/admin/get-team-leader", {
+      const teamleaderres = await api.get("/get-team-leader", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -93,7 +93,7 @@ const CreateForm = () => {
   };
   const Requirment = async () => {
     try {
-      const response = await axios.get('https://api.almonkdigital.in/api/admin/view-master-setting', {
+      const response = await api.get('/view-master-setting', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -115,7 +115,7 @@ const CreateForm = () => {
     setTeamLeaderId(teamleaderId)
     // console.log("id", teamleaderId)
     try {
-      const agentRes = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${teamleaderId}`, {
+      const agentRes = await api.get(`/get-agent/${teamleaderId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }

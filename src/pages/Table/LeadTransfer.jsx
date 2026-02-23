@@ -41,7 +41,7 @@ const LeadTransfer = () => {
   const fetchTeamLeaders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("https://api.almonkdigital.in/api/admin/get-team-leader", {
+      const res = await api.get("/get-team-leader", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setTeamLeaders(res.data.data);
@@ -57,7 +57,7 @@ const LeadTransfer = () => {
     setFilters(prev => ({ ...prev, teamLeaderId: id }));
     setLoading(true);
     try {
-      const res = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${id}`, {
+      const res = await api.get(`/get-agent/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setAgents(res.data.data);
@@ -71,7 +71,7 @@ const LeadTransfer = () => {
   const fetchProjects = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("https://api.almonkdigital.in/api/admin/view-master-setting", {
+      const res = await api.get("/view-master-setting", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       const projectList = res.data.data.filter(item => item.cat_name === "Project");
@@ -111,7 +111,7 @@ const LeadTransfer = () => {
       to_date: filters.dateTo
     };
     try {
-      const res = await axios.post("https://api.almonkdigital.in/api/admin/search-agent-data", payload, {
+      const res = await api.post("/search-agent-data", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       const result = res?.data?.data;
@@ -158,7 +158,7 @@ const LeadTransfer = () => {
     setTransferFilters(prev => ({ ...prev, teamLeaderId: id }));
     setLoading(true);
     try {
-      const res = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${id}`, {
+      const res = await api.get(`/get-agent/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setAgentsTransfer(res.data.data);
@@ -191,7 +191,7 @@ const LeadTransfer = () => {
       lead_status: transferFilters.transferstatus,
       user_id: user.user_id,
     };
-    console.log(payload)
+    // console.log(payload)
     try {
       const res = await api.post("/transfer-agent-lead", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }

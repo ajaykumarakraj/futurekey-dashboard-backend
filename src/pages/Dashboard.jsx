@@ -32,11 +32,11 @@ const Dashboard = () => {
   }, []);
 const fetchTeamLeaders = async () => {
     try {
-      const res = await axios.get("https://api.almonkdigital.in/api/admin/get-team-leader", {
+      const res = await api.get("/get-team-leader", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setTeamLeaders(res.data.data);
-      console.log(res.data.data)
+      // console.log(res.data.data)
     } catch (err) {
       console.error("Team Leader fetch error:", err);
     }
@@ -45,18 +45,18 @@ const fetchTeamLeaders = async () => {
     const id = e.target.value;
     setFilters(prev => ({ ...prev, teamLeaderId: id }));
     try {
-      const res = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${id}`, {
+      const res = await api.get(`/get-agent/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setAgents(res.data.data);
-        console.log(res.data.data)
+        // console.log(res.data.data)
     } catch (err) {
       console.error("Agent fetch error:", err);
     }
   };
  const fetchProjects = async () => {
     try {
-      const res = await axios.get("https://api.almonkdigital.in/api/admin/view-master-setting", {
+      const res = await api.get("/view-master-setting", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
      
@@ -86,12 +86,12 @@ const getsearchdata=async(page = 1)=>{
     project:filters.projectId||"",
 
     }
-  console.log("post data",payload)
+  // console.log("post data",payload)
 try {
-  const res=await axios.post("https://api.almonkdigital.in/api/admin/get-home-screen-data",payload,{  
+  const res=await api.post("/get-home-screen-data",payload,{  
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }    
   })
-  console.log("get data",res.data.data)
+  // console.log("get data",res.data.data)
  setData(res.data.data || {});
      
   

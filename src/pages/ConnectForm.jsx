@@ -43,13 +43,13 @@ const ConnectForm = () => {
     };
     const GetDatafun = async () => {
         try {
-            const res = await axios.get("https://api.almonkdigital.in/api/admin/get-all-pages", {
+            const res = await api.get("/get-all-pages", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 }
             })
             if (res.data.status === 200) {
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 setTableData(res.data.project_data)
                 setPage(res.data.data)
             }
@@ -63,7 +63,7 @@ const ConnectForm = () => {
         setSelectPage(e.target.value)
         const getname = e.target.value
         try {
-            const response = await axios.get(`https://api.almonkdigital.in/api/admin/get-form-bypages/${getname}`, {
+            const response = await api.get(`/get-form-bypages/${getname}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 }
@@ -87,7 +87,7 @@ const ConnectForm = () => {
                 project_name: selectProject
             }
             // console.log(payload)
-            const response = await axios.post("https://api.almonkdigital.in/api/admin/connect-form", payload, {
+            const response = await api.post("/connect-form", payload, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 },
@@ -167,7 +167,7 @@ const handleDelete = async (id) => {
         });
     };
 
-    console.log(tableData)
+    // console.log(tableData)
     return (
         <div className="container mt-5">
             <h3 className="mb-4 text-center">Connect Form</h3>

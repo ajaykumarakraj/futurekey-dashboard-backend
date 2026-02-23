@@ -46,7 +46,7 @@ setLoginstatus(value)
                     assign_team_leader: item.assign_team_leader,
                     login_status:item.login_status
                 }));
-console.log(mapped)
+// console.log(mapped)
                 setData(mapped);
             
             } else {

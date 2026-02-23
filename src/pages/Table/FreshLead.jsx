@@ -37,7 +37,7 @@ const project = searchParams.get("project");
 
   const fetchTeamLeaders = async () => {
     try {
-      const res = await axios.get("https://api.almonkdigital.in/api/admin/get-team-leader", {
+      const res = await api.get("/get-team-leader", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setTeamLeaders(res.data.data);
@@ -48,7 +48,7 @@ const project = searchParams.get("project");
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get("https://api.almonkdigital.in/api/admin/view-master-setting", {
+      const res = await api.get("/view-master-setting", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       const projectList = res.data.data.filter(item => item.cat_name === "Project");
@@ -62,7 +62,7 @@ const project = searchParams.get("project");
     const id = e.target.value;
     setFilters(prev => ({ ...prev, teamLeaderId: id }));
     try {
-      const res = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${id}`, {
+      const res = await api.get(`/get-agent/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setAgents(res.data.data);
@@ -90,7 +90,7 @@ const project = searchParams.get("project");
         page,
        project:search
       };
-console.log(payload)
+// console.log(payload)
       const res = await api.post("/fresh-lead-filter", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
@@ -154,7 +154,7 @@ console.log(payload)
   };
 
   const handleTransfer = async () => {
-    if (!filters.teamLeaderId) return alert("Please select a Team Leader first.");
+    
     const payload = {
       lead_id: selectedLeads,
       tl_id: filters.teamLeaderId,

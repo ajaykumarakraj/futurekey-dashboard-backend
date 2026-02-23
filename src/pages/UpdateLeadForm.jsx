@@ -115,7 +115,7 @@ const UpdateLeadForm = () => {
     }
     const Requirment = async () => {
         try {
-            const response = await axios.get('https://api.almonkdigital.in/api/admin/view-master-setting', {
+            const response = await api.get('/view-master-setting', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -134,7 +134,7 @@ const UpdateLeadForm = () => {
     }
     const teamLeaderfn = async () => {
         try {
-            const teamleaderres = await axios.get("https://api.almonkdigital.in/api/admin/get-team-leader", {
+            const teamleaderres = await api.get("/get-team-leader", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -153,7 +153,7 @@ const UpdateLeadForm = () => {
         setTeamLeaderId(teamleaderId)
 
         try {
-            const agentRes = await axios.get(`https://api.almonkdigital.in/api/admin/get-agent/${teamleaderId}`, {
+            const agentRes = await api.get(`/get-agent/${teamleaderId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -176,13 +176,13 @@ const UpdateLeadForm = () => {
     const GetDataFn = async () => {
 
         try {
-            const res = await axios.get(`https://api.almonkdigital.in/api/admin/fetch-lead-data/${id}`, {
+            const res = await api.get(`/fetch-lead-data/${id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             })
             if (res.data.status === 200) {
-                console.log("fetchdata", res.data)
+                // console.log("fetchdata", res.data)
                 const fetchdata = res.data.data
 
                 setName(fetchdata.name||"")
@@ -260,7 +260,7 @@ const UpdateLeadForm = () => {
         };
         // console.log("post for update", formData)
         try {
-            const res = await api.post("https://api.almonkdigital.in/api/admin/update-lead", formData, {
+            const res = await api.post("/update-lead", formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -280,7 +280,7 @@ const UpdateLeadForm = () => {
 // remove notes api 
 
 const handelremovenote=async(e)=>{
-    console.log("run fun")
+    // console.log("run fun")
  e.preventDefault();
 
 
@@ -294,7 +294,7 @@ const handelremovenote=async(e)=>{
                confirmButtonText: 'Yes, delete it!',
            }).then(async (result) => {
                if (result.isConfirmed) { try {
-const res=await axios.get(`https://api.almonkdigital.in/api/admin/remove-notes/${id}`,{
+const res=await api.get(`/remove-notes/${id}`,{
     headers:{
         Authorization: `Bearer ${localStorage.getItem("token")}`,
     }

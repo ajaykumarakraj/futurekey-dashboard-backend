@@ -40,7 +40,7 @@ function UserForm() {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             });
-console.log(res.data )
+// console.log(res.data )
             if (res.data.status === 200) {
                 toast.success("User added successfully");
                 resetForm();
@@ -65,7 +65,7 @@ console.log(res.data )
 
     const getteamLeader = async () => {
         try {
-            const resTL = await axios.get("https://api.almonkdigital.in/api/admin/get-team-leader", {
+            const resTL = await api.get("/get-team-leader", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
