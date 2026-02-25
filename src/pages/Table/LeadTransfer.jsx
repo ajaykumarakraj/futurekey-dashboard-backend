@@ -108,7 +108,8 @@ const LeadTransfer = () => {
       lead_status: filters.status,
       project: filters.projectId,
       from_date: filters.dateFrom,
-      to_date: filters.dateTo
+      to_date: filters.dateTo,
+       page: page
     };
     try {
       const res = await api.post("/search-agent-data", payload, {
@@ -119,19 +120,19 @@ const LeadTransfer = () => {
         const mapped = result.map((item, index) => ({
           id: (page - 1) * rowsPerPage + index + 1,
           customerId: item.id,
-          enterDate: moment(item.created_at).utcOffset("+05:30").format("DD/MM/YYYY, hh:mm A"),
+          enterDate: item.entry_date,
           contactPerson: item.name,
           contactNumber: item.contact,
           leadSource: item.lead_source,
           city: item.city,
-          Agentassign: moment(item.assign_time).utcOffset("+05:30").format("DD/MM/YYYY, hh:mm A"),
+          Agentassign: item.assign_time,
           teamLeader: item.team_leader,
           agent: item.agent,
           leadstatus: item.lead_status,
           project: item.form_name,
           followUp: item.follow_ups,
           archivedReason: item.archived_reason,
-          lastUpdate: moment(item.updated_at).utcOffset("+05:30").format("DD/MM/YYYY, hh:mm A"),
+          lastUpdate: item.updated_at,
           observation: item.remark,
         }));
         setData(mapped);
@@ -263,20 +264,24 @@ const LeadTransfer = () => {
     { field: "observation", headerName: "Observation", align: "left" },
   ];
 
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) getsearchdata(page);
-  };
+ const handlePageChange = (page) => {
+  if (page >= 1 && page <= totalPages) {
+    setCurrentPage(page);   // 👈 ye missing ho sakta hai
+    getsearchdata(page);
+  }
+};
 
-  function getPageNumbers(currentPage, totalPages) {
-    const pageNumbers = [];
-    const start = Math.max(1, currentPage - 2);
-    const end = Math.min(totalPages, currentPage + 2);
-    for (let i = start; i <= end; i++) {
-      pageNumbers.push(i);
-    }
-    return pageNumbers;
+function getPageNumbers(currentPage, totalPages) {
+  const pageNumbers = [];
+  const start = Math.max(1, currentPage - 2);
+  const end = Math.min(totalPages, currentPage + 2);
+
+  for (let i = start; i <= end; i++) {
+    pageNumbers.push(i);
   }
 
+  return pageNumbers;
+}
   return (
     <div>
       <h2 className="mb-2 text-center textsize headingstyle">Lead Transfer</h2>

@@ -38,19 +38,19 @@ handleSearch()
         const mapped = result.map((item, index) => ({
           id: (page - 1) * rowsPerPage + index + 1,
           customerId: item.id,
-          enterDate: moment(item.created_at).utcOffset("+05:30").format("DD/MM/YYYY, hh:mm A"),
+          enterDate: item.entry_date,
           contactPerson: item.name,
           contactNumber: item.contact,
           leadSource: item.lead_source,
           city: item.city,
-          Agentassign: moment(item.assign_time).utcOffset("+05:30").format("DD/MM/YYYY, hh:mm A"),
+          Agentassign: item.assign_time,
           teamLeader: item.team_leader,
           agent: item.agent,
           leadstatus: item.lead_status,
           project: item.form_name,
           followUp: item.follow_ups,
           archivedReason: item.archived_reason,
-          lastUpdate: moment(item.updated_at).utcOffset("+05:30").format("DD/MM/YYYY, hh:mm A"),
+          lastUpdate: item.updated_at,
           observation: item.remark,
         }));
 
