@@ -16,6 +16,7 @@ const FreshLead = () => {
   const [agents, setAgents] = useState([]);
   const [projects, setProjects] = useState([]);
   const [search,setSearch]=useState("")
+  const [isSearching, setIsSearching] = useState(false);
   const [filters, setFilters] = useState({
     teamLeaderId: "",
     agentId: "",
@@ -80,24 +81,26 @@ const project = searchParams.get("project");
   };
 
 // search data by project 
-  const handleSearch  = (e) => {
-    setSearch( e.target.value);
-  };
- const getsearchdata = async (page = 1) => {
+
+
+const handleSearchProject = async (e,page = 1) => {
+    const selectedValue = e.target.value;
+    setSearch(selectedValue)
+  console.log(selectedValue,"selectproject")
     try {
+     
       const payload = {
-        // lead_status: "0",
-        page,
-       project:search
+        project:selectedValue
       };
-// console.log(payload)
+// console.log("post",payload)
       const res = await api.post("/fresh-lead-filter", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
       const list = res?.data?.data || [];
       const meta = res?.data?.meta;
-
+      console.log(list)
+console.log(meta)
       const mapped = list.map((item, index) => ({
         serialNO: (page - 1) * rowsPerPage + index + 1,
         id: item.id,
@@ -125,14 +128,15 @@ const project = searchParams.get("project");
         page,
        tl_id:tl,agent_id:agent,project:project
       };
-
+// console.log("post",payload)
       const res = await api.post("/get-lead-data", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
       const list = res?.data?.data || [];
       const meta = res?.data?.meta;
-
+      // console.log(list)
+console.log(meta)
       const mapped = list.map((item, index) => ({
         serialNO: (page - 1) * rowsPerPage + index + 1,
         id: item.id,
@@ -153,8 +157,9 @@ const project = searchParams.get("project");
     }
   };
 
-  const handleTransfer = async () => {
-    
+  const handleTransfer =  async(e) => {
+    e.preventDefault()
+    console.log("run")
     const payload = {
       lead_id: selectedLeads,
       tl_id: filters.teamLeaderId,
@@ -162,7 +167,7 @@ const project = searchParams.get("project");
       project_id: filters.projectId,
       user_id: user.user_id
     };
-    // console.log("check", payload)
+    console.log("check", payload)
     try {
       const res = await api.post("/assign-lead", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -181,9 +186,17 @@ const project = searchParams.get("project");
     }
   };
 
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) fetchLeads(page);
-  };
+ const handlePageChange = (page) => {
+  if (page >= 1 && page <= totalPages) {
+
+    if (isSearching) {
+      handleSearch(page);   // ✅ Call search API
+    } else {
+      fetchLeads(page);     // ✅ Call normal API
+    }
+
+  }
+};
 
   const getPageNumbers = () => {
     const pages = [];
@@ -226,7 +239,9 @@ const project = searchParams.get("project");
     { field: "project", headerName: "Project" }
   ];
   // console.log(user)
-
+// const handleSearchProject=()=>{
+//   console.log("run")
+// }
   return (
 
     <div >
@@ -234,13 +249,13 @@ const project = searchParams.get("project");
     <form>
       <div style={{ background: "#eee", padding: 15, borderRadius: 6, marginBottom: 15, display: "flex", justifyContent: "space-between" }}>
         <div style={{display:"flex",gap:10}}>
-          <select onChange={handleSearch} value={search}>
+          <select onChange={handleSearchProject} value={search}>
           <option value="">Select Project</option>
           {projects.map(p => (
             <option key={p.cat_value} value={p.cat_value}>{p.cat_value}</option>
           ))}
         </select>
-          <button type="button" className="search-btn" onClick={() => getsearchdata(1)}>Search</button>
+          {/* <button type="button" className="search-btn" onClick={() => getsearchdata(1)}>Search</button> */}
       </div>
 <div style={{display:"flex",gap:10, alignItems: "center"}}>
   <p className="mb-0" style={{fontSize:12}}>Assign To</p>
@@ -275,19 +290,38 @@ const project = searchParams.get("project");
 
       <Example data={data} columns={columns} rowsPerPageOptions={[rowsPerPage]} />
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 10, marginTop: 20 }}>
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1}>Prev</button>
-        {getPageNumbers().map(page => (
-          <button
-            key={page}
-            onClick={() => handlePageChange(page)}
-            style={{ backgroundColor: page === currentPage ? "#f00" : "#003961", color: "#fff", padding: "6px 12px" }}
-          >
-            {page}
-          </button>
+       {/* Pagination */}
+      <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>
+       <button 
+  type="button"
+  onClick={() => handlePageChange(currentPage - 1)} 
+  disabled={currentPage <= 1}
+>
+  Prev
+</button>
+        {getPageNumbers().map((page) => (
+         <button
+  type="button"
+  key={page}
+  onClick={() => handlePageChange(page)}
+  style={{
+    backgroundColor: page === currentPage ? "#f00" : "#003961",
+    color: "#fff",
+    padding: "6px 12px",
+  }}
+>
+  {page}
+</button>
         ))}
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPages}>Next</button>
+       <button 
+  type="button"
+  onClick={() => handlePageChange(currentPage + 1)} 
+  disabled={currentPage >= totalPages}
+>
+  Next
+</button>
       </div>
+
       </form>
     </div>
   );

@@ -3,12 +3,14 @@ import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../component/AuthContext'
 import imgad from "../assets/images/hacker.png"
 import Swal from 'sweetalert2';
+import axios from "axios";
 export default function MiniDrawer() {
   const { user, token } = useAuth();
   const [isOpen, setIsOpen] = useState(true);
   const [isLeadsOpen, setIsLeadsOpen] = useState(false);
   const [isProjectsOpen, setIsProjectsOpen] = useState(false);
   const [isMasterOpen, setMasterOpen] = useState(false);
+   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,29 +34,75 @@ export default function MiniDrawer() {
     });
   };
 
+
+
+
+  const handleSearch = async () => {
+    if (!search.trim()) return alert("Enter search value");
+     navigate(`/lead/searchalldata?query=${encodeURIComponent(search)}`);
+  };
   // console.log(user)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', fontFamily: 'Helvetica, Arial, sans-serif' }}>
       {/* Top Bar */}
-      <div style={{
-        height: '60px', background: '#1e1e1e', color: 'white',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '15px 20px', boxShadow: '0 2px 5px 0px #000'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          {/* <button
-            onClick={() => setIsOpen((prev) => (!prev))}
-            style={{ background: 'none', color: 'white', border: 'none', fontSize: '24px', cursor: 'pointer' }}>
-            ☰
-          </button> */}
-          <h1 style={{ margin: '0', fontSize: '1.5rem' }}>
-            ALMONK CRM</h1>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          {/* User Profile or icon can go here */}
-          <span style={{ fontSize: '15px', cursor: 'pointer' }}><img src={imgad} style={{ height: "22px" }} />{user?.name}  ({user?.role})</span>
-        </div>
+      <div
+      style={{
+        height: "60px",
+        background: "#1e1e1e",
+        color: "white",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "15px 20px",
+        boxShadow: "0 2px 5px 0px #000",
+     
+      }}
+    >
+      {/* Left */}
+      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+        <h1 style={{ margin: "0", fontSize: "1.5rem" }}>ALMONK CRM</h1>
       </div>
+
+      {/* Center Search */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <input
+          type="text"
+          placeholder="Search here..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            padding: "6px 10px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+            outline: "none",
+            width: "250px",
+               marginBottom: "0"
+          }}
+        />
+
+        <button
+          onClick={handleSearch}
+          style={{
+            padding: "6px 12px",
+            borderRadius: "5px",
+            border: "none",
+            background: "#003961",
+            color: "white",
+            cursor: "pointer",
+          }}
+        >
+          Search
+        </button>
+      </div>
+
+      {/* Right */}
+      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+        <span style={{ fontSize: "15px", cursor: "pointer" }}>
+          <img src={imgad} alt="user" style={{ height: "22px", marginRight: "5px" }} />
+          {user?.name} ({user?.role})
+        </span>
+      </div>
+    </div>
 
       {/* Main Section */}
       <div style={{ display: 'flex', flex: '1' }}>

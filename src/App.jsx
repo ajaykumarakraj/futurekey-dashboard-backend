@@ -31,6 +31,7 @@ import UpdateLeadForm from './pages/UpdateLeadForm';
 import ConnectForm from './pages/ConnectForm';
 import Reassign from './pages/Table/Reassign';
 import LeadTransfer from './pages/Table/LeadTransfer';
+import SearchAllData from './pages/Table/SearchAllData';
 
 const App = () => {
   return (
@@ -75,6 +76,7 @@ const App = () => {
         <Route path="/support" element={<ContactSupport />} />
         <Route path="/mastersetting" element={<MasterSetting />} />
         <Route path='/connect-form' element={<ConnectForm />} />
+        <Route path="/lead/searchalldata" element={<SearchAllData/>}/>
       </Route>
 
       {/* Fallback */}

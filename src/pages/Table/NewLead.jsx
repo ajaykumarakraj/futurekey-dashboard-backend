@@ -149,7 +149,7 @@ try {
   const handleSearch = async (page = 1) => {
     try {
       const payload = { lead_status: "1", page,tl_id:tl,agent_id:agent,project:project };
-      // console.log(payload)
+      console.log(payload)
       const token = localStorage.getItem("token");
 
       const res = await api.post("/get-lead-data", payload, {
@@ -157,7 +157,7 @@ try {
       });
 
       const result = res?.data?.data;
-      // console.log("get lead dataa",result)
+      console.log("get lead dataa",result)
       if (res.status === 200 && Array.isArray(result)) {
         const mapped = result.map((item, index) => ({
           id: (page - 1) * rowsPerPage + index + 1,
