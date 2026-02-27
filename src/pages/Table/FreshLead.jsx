@@ -159,6 +159,10 @@ console.log(meta)
 
   const handleTransfer =  async(e) => {
     e.preventDefault()
+     if (!filters.teamLeaderId) {
+      alert("Please select a Team Leader first.");
+      return;
+    }
     console.log("run")
     const payload = {
       lead_id: selectedLeads,
@@ -172,8 +176,8 @@ console.log(meta)
       const res = await api.post("/assign-lead", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      // console.log(res)
-      if (res?.status === 200) {
+      console.log(res)
+      if (res.data.status === 200) {
         alert("Leads transferred!");
         setSelectedLeads([]);
         fetchLeads(currentPage);
