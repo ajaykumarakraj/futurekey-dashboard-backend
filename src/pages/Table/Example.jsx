@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "../../app.css";
 import "./tableStyles.css";
-
+import { useNavigate } from "react-router-dom";
 const Example = ({ data, columns, rowsPerPageOptions = [5, 10, 25] }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
   const [filters, setFilters] = useState({});
-
+const navigate = useNavigate();
   const handleFilterChange = (field, value) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -59,25 +59,34 @@ const Example = ({ data, columns, rowsPerPageOptions = [5, 10, 25] }) => {
             ))}
           </tr>
         </thead>
-        <tbody>
-          {paginatedData.length > 0 ? (
-            paginatedData.map((row, i) => (
-              <tr key={i}>
-                {columns.map((column, i) => (
-                  <td key={i}>
-                    {column.renderCell ? column.renderCell(row) : row[column.field]}
-                  </td>
-                ))}
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={columns.length} style={{ textAlign: "center" }}>
-                No matching records found
-              </td>
-            </tr>
-          )}
-        </tbody>
+       <tbody>
+  {paginatedData.length > 0 ? (
+    paginatedData.map((row, i) => (
+     <tr
+  key={i}
+  onClick={() => row.duplicatestatus && navigate(`/duplicate-lead/${row.id}`)}
+  style={{
+    backgroundColor: row.duplicatestatus ? "#ffe6e6" : "",
+    color: row.duplicatestatus ? "#b30000" : "",
+    fontWeight: row.duplicatestatus ? "600" : "",
+    cursor: row.duplicatestatus ? "pointer" : "default"
+  }}
+>
+        {columns.map((column, i) => (
+          <td key={i}>
+            {column.renderCell ? column.renderCell(row) : row[column.field]}
+          </td>
+        ))}
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={columns.length} style={{ textAlign: "center" }}>
+        No matching records found
+      </td>
+    </tr>
+  )}
+</tbody>
       </table>
 
 

@@ -231,19 +231,27 @@ try {
       {/* Filter Section */}
       <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-         <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
-          <option value="">Select Team Leader</option>
-          {teamLeaders.map(tl => (
-            <option key={tl.user_id} value={tl.user_id}>{tl.name}</option>
-          ))}
-        </select>
+        <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
+  <option value="">Select Team Leader</option>
+  {[...teamLeaders]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(tl => (
+      <option key={tl.user_id} value={tl.user_id}>
+        {tl.name}
+      </option>
+    ))}
+</select>
 
-          <select onChange={handleAgentChange} value={filters.agentId}>
-          <option value="">Select Agent</option>
-          {agents.map(a => (
-            <option key={a.id} value={a.id}>{a.name}</option>
-          ))}
-        </select>
+<select onChange={handleAgentChange} value={filters.agentId}>
+  <option value="">Select Agent</option>
+  {[...agents]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(a => (
+      <option key={a.id} value={a.id}>
+        {a.name}
+      </option>
+    ))}
+</select>
 
           {/* <select name="leadSource" value={filters.leadSource} onChange={handleFilterChange}>
             <option value="">Lead Source</option>

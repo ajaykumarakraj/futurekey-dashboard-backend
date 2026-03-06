@@ -137,7 +137,7 @@ const CreateForm = () => {
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !number || !selectedGender || !selectedState || !leadSource || !selectproject) {
+    if (!name || !number || !selectedGender  || !leadSource || !selectproject) {
       toast.error("Please fill all required fields.");
       return;
     }
@@ -273,7 +273,7 @@ window.location.reload();
             <div className="row">
               <div className="col-md-6 mb-3">
                 <select className="form-select" value={selectedState} onChange={(e) => setSelectedState(e.target.value)}>
-                  <option value="">Select State *</option>
+                  <option value="">Select State </option>
                   {Array.isArray(statedata) && statedata.map((v, key) => (
                     <option value={v.state} key={key}>{v.state}</option>
                   ))
@@ -290,17 +290,19 @@ window.location.reload();
             <h5 className="mb-3">Assign Lead</h5>
             <div className="row">
               <div className="col-md-6 mb-3">
-                <select className="form-select" onChange={handleFilterChange} >
-                  <option >Select TeamLeader</option>
-                  {
+               <select className="form-select" onChange={handleFilterChange}>
+  <option value="">Select TeamLeader</option>
 
-                    Array.isArray(teamLeader) && teamLeader.map((value, key) =>
-                      <option key={key} value={value.user_id}>{value.name}</option>
-                    )
-                  }
-
-
-                </select>
+  {Array.isArray(teamLeader) &&
+    [...teamLeader]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((value, key) => (
+        <option key={key} value={value.user_id}>
+          {value.name}
+        </option>
+      ))
+  }
+</select>
               </div>
               <div className="col-md-6 mb-3">
                 <select className="form-select" onChange={handleAgentId} >

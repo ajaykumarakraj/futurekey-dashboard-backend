@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
-import Example from "./Example";
+import React, { useEffect, useState } from "react";
 import api from "../../component/api";
+import Example from "./Example";
 import moment from "moment";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
-import { useAuth } from "../../component/AuthContext";
-const TommorowSiteVisit = () => {
-   const [searchParams] = useSearchParams();
-const [filters, setFilters] = useState({
+const CompleteSite = () => {
+ const [searchParams] = useSearchParams();
+ const [filters, setFilters] = useState({
     teamLeaderId: "",
     agentId: "",
     projectId: "",
@@ -16,17 +15,22 @@ const [filters, setFilters] = useState({
     status:""
   });
   const [data, setData] = useState([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
-   const [teamLeaders, setTeamLeaders] = useState([]);
-  const [agents, setAgents] = useState([]);
-    const [projects, setProjects] = useState([]);
-    const tl = searchParams.get("tl");
+ const [teamLeaders, setTeamLeaders] = useState([]);
+const [agents, setAgents] = useState([]);
+  const [projects, setProjects] = useState([]);
+  // const [leadSource,setLeadSource]=useState([])
+
+const tl = searchParams.get("tl");
 const agent = searchParams.get("agent");
 const project = searchParams.get("project");
-  const rowsPerPage = 50;
+
+// console.log("get data",tl,agent,project)
+   const rowsPerPage = 50;
+
+
 
 //start search section all data 
  useEffect(() => {
@@ -85,8 +89,8 @@ const handleStatus = (e) => {
     setFilters(prev => ({ ...prev, status: e.target.value }));
   };
 const getsearchdata=async(page = 1)=>{
-  
-
+//   
+//  if (!filters.agentId) return alert("Please select a Agent.");
     const payload={
     tl_id:filters.teamLeaderId,
     agent_id:filters.agentId,
@@ -137,26 +141,26 @@ try {
 }
 // end search data section 
 
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }))
+    setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSearch = async (page = 1) => {
     try {
-      const payload = { lead_status: "9", page,tl_id:tl,agent_id:agent,project:project };
-      // You can add additional filters here:
-      // teamLeader: filters.teamLeader, etc.
-      const res = await api.post('/get-lead-data', payload, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const payload = { lead_status: "12", page,tl_id:tl,agent_id:agent,project:project };
+      console.log(payload)
+      const token = localStorage.getItem("token");
+
+      const res = await api.post("/get-lead-data", payload, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (res?.status === 200 && Array.isArray(res?.data?.data)) {
-        // console.log(res.data.data)
-        const mapped = res?.data?.data?.map((item, index) => ({
-
-          id: (page - 1) * 50 + index + 1,
+      const result = res?.data?.data;
+      console.log("get lead dataa",result)
+      if (res.status === 200 && Array.isArray(result)) {
+        const mapped = result.map((item, index) => ({
+          id: (page - 1) * rowsPerPage + index + 1,
           customerId: item.id,
           enterDate: item.entry_date,
           contactPerson: item.name,
@@ -172,28 +176,38 @@ try {
           archivedReason: item.archived_reason,
           lastUpdate: item.updated_at,
           observation: item.remark,
-        }))
-        setData(mapped);
-        setCurrentPage(res?.data?.meta?.current_page);
-        setTotalPages(res?.data?.meta?.last_page);
-        setTotalRecords(res?.data?.meta?.total);
-      } else {
-        console.error('API did not return an array');
-        setData([]);
+        }));
 
+        setData(mapped);
+        setCurrentPage(res.data.meta?.current_page || 1);
+        setTotalPages(res.data.meta?.last_page || 1);
+        setTotalRecords(res.data.meta?.total || 0);
+      } else {
+        setData([]);
       }
-    } catch (error) {
-      console.error("Fetching Error", error);
+    } catch (err) {
+      console.error("API Error", err);
     }
   };
 
-  useEffect(() => {
-    handleSearch(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  
+  // }, []);
 
-  const handlePageChange = (newPage) => {
-    handleSearch(newPage);
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      handleSearch(page);
+    }
+  };
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const start = Math.max(1, currentPage - 2);
+    const end = Math.min(totalPages, currentPage + 2);
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
   };
 
   const columns = [
@@ -226,22 +240,10 @@ try {
     { field: "observation", headerName: "Observation", align: "left" },
   ];
 
-  function getPageNumbers(currentPage, totalPages) {
-    const pageNumbers = [];
-
-    const start = Math.max(1, currentPage - 2);
-    const end = Math.min(totalPages, currentPage + 2);
-
-    for (let i = start; i <= end; i++) {
-      pageNumbers.push(i);
-    }
-    return pageNumbers;
-  }
-
   return (
     <div>
-      <h2 className="mb-2 text-center textsize headingstyle">Tommorow Site Visit Leads</h2>
-      {/* Filter Section */}
+      <h2 className="mb-2 text-center textsize headingstyle">Complete Side Visit</h2>
+      {/* Filters */}
       <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
         <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
@@ -278,7 +280,7 @@ try {
             <option  value="11">Reassign Leads</option>
             <option  value="2">In Progress Leads</option>
             <option  value="3">Hot Leads</option>
-        
+           
             <option  value="4">Archived Leads</option>
             <option  value="5">Converted Leads</option>
         </select>
@@ -300,42 +302,38 @@ try {
         </form>
       </div>
 
-      {/* Table Section */}
-      <Example data={data} columns={columns} rowsPerPageOptions={[50]} />
+      {/* Table */}
+      <Example data={data} columns={columns} rowsPerPageOptions={[rowsPerPage]} />
 
-      {/* Enhanced Pagination Section */}
-      <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-        {/* Prev Button */}
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage <= 1}
-          style={{ padding: "8px 16px", backgroundColor: currentPage <= 1 ? "#e0e0e0" : "#003961", color: currentPage <= 1 ? "#888" : "#ffffff", border: "none", borderRadius: "6px", cursor: currentPage <= 1 ? "not-allowed" : "pointer" }}
-        >
+      {/* Pagination */}
+      <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1}>
           Prev
         </button>
-
-        {/* Numbered Pages */}
-        {getPageNumbers(currentPage, totalPages).map((page) => (
+        {getPageNumbers().map((page) => (
           <button
             key={page}
             onClick={() => handlePageChange(page)}
-            style={{ padding: "6px 12px", backgroundColor: page === currentPage ? "#ff0000" : "#003961", color: "#ffffff", border: "none", borderRadius: "6px" }}
+            style={{
+              backgroundColor: page === currentPage ? "#f00" : "#003961",
+              color: "#fff",
+              padding: "6px 12px",
+            }}
           >
             {page}
           </button>
         ))}
-
-        {/* Next Button */}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage >= totalPages}
-          style={{ padding: "8px 16px", backgroundColor: currentPage >= totalPages ? "#e0e0e0" : "#003961", color: currentPage >= totalPages ? "#888" : "#ffffff", border: "none", borderRadius: "6px", cursor: currentPage >= totalPages ? "not-allowed" : "pointer" }}
-        >
+        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPages}>
           Next
         </button>
       </div>
+
+      {/* Total Record Info */}
+      {/* <div style={{ textAlign: "center", marginTop: "10px", fontWeight: "bold" }}>
+        Showing page {currentPage} of {totalPages} | Total Records: {totalRecords}
+      </div> */}
     </div>
-  )
+  );
 };
 
-export default TommorowSiteVisit;
+export default CompleteSite;

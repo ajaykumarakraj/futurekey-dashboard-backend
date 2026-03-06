@@ -38,7 +38,7 @@ const VerifyOtpPage = () => {
 
                 navigate('/dashboard');
             } else {
-                setError(res.data.message || 'Invalid OTP');
+                setError("Something went wrong" || 'Invalid OTP');
             }
         } catch (error) {
             setError('Error verifying OTP. Please try again.');

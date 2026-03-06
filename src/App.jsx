@@ -32,6 +32,7 @@ import ConnectForm from './pages/ConnectForm';
 import Reassign from './pages/Table/Reassign';
 import LeadTransfer from './pages/Table/LeadTransfer';
 import SearchAllData from './pages/Table/SearchAllData';
+import CompleteSite from './pages/Table/CompleteSite';
 
 const App = () => {
   return (
@@ -77,6 +78,7 @@ const App = () => {
         <Route path="/mastersetting" element={<MasterSetting />} />
         <Route path='/connect-form' element={<ConnectForm />} />
         <Route path="/lead/searchalldata" element={<SearchAllData/>}/>
+        <Route path="/leads/completesite" element={<CompleteSite/>}/>
       </Route>
 
       {/* Fallback */}

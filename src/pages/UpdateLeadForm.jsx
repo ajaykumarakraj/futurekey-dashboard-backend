@@ -51,6 +51,12 @@ const UpdateLeadForm = () => {
     const [callStatus, setCallStatus] = useState("");
     const [callAction, setCallAction] = useState("");
 
+
+
+    // visit status
+    const [currentvisit,setCurrentvisit]=useState("")
+    const [officevisit,setOfficevisit]=useState("")
+    const [housevisit,setHousevisit]=useState("")
     // const [followUpDate, setFollowUpDate] = useState('');
 
     const [error, setError] = useState('');
@@ -58,7 +64,7 @@ const UpdateLeadForm = () => {
     const [scheduleSiteDate, setScheduleSiteDate] = useState("");
     const [houseVisitDate, setHouseVisitDate] = useState("");
     const [officeVisitDate, setOfficeVisitDate] = useState("");
-    const [midWayDate, setMidWayDate] = useState("");
+    // const [midWayDate, setMidWayDate] = useState("");
     const genderData = ["Male", "Female", "Other"];
     const customerTypeData = ["Dealer", "Customer"];
 
@@ -202,6 +208,11 @@ const UpdateLeadForm = () => {
                 setTeamLeaderId(fetchdata.assign_team_leader_id||"")
                 setGetNote(res.data.notes||"")
                 setLeadStatus(fetchdata.lead_status||"")
+
+
+                setCurrentvisit(fetchdata.current_site_visit)
+                setOfficevisit(fetchdata.current_office_visit)
+                setHousevisit(fetchdata.current_house_visit)
             }
         } catch (error) {
             console.log(error)
@@ -210,7 +221,7 @@ const UpdateLeadForm = () => {
     // submit update api 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!name || !number || !selectedGender || !selectedState || !leadSource || !selectproject) {
+        if (!name || !number || !selectedGender  || !leadSource || !selectproject) {
             toast.error("Please fill all required fields.");
             return;
         }
@@ -251,7 +262,7 @@ const UpdateLeadForm = () => {
             site_visit: scheduleSiteDate,
             house_visit: houseVisitDate,
             office_visit: officeVisitDate,
-            mid_way_visit: midWayDate,
+            // mid_way_visit: midWayDate,
             call_status: callStatus,
             follow_up: selectedDate,
             last_call_action: callAction,
@@ -309,7 +320,7 @@ if(res.data.status==200){
                }
             })
 }
-    // console.log("check", getnote)
+    // console.log("check", currentvisit)
     // console.log("check", getnote)
     return (
         <div className="container">
@@ -349,7 +360,7 @@ if(res.data.status==200){
                             <div className="col-md-6 mb-3">
                                 <label>Select State</label>
                                 <select className="form-select" value={selectedState} onChange={(e) => setSelectedState(e.target.value)}>
-                                    <option value="">Select State *</option>
+                                    <option value="">Select State </option>
                                     {Array.isArray(statedata) && statedata.map((v, key) => (
                                         <option value={v.state} key={key}>{v.state}</option>
                                     ))
@@ -414,17 +425,19 @@ if(res.data.status==200){
                             </div>
                             <div className="col-md-6 mb-3">
                                 <label>Select Team Leader</label>
-                                <select className="form-select" onChange={handleFilterChange} >
-                                    <option value=''>{getteamleader || "Select Team Leader"}</option>
-                                    {
+                              <select className="form-select" onChange={handleFilterChange}>
+  <option value="">{getteamleader || "Select Team Leader"}</option>
 
-                                        Array.isArray(teamLeader) && teamLeader.map((value, key) =>
-                                            <option key={key} value={value.user_id}>{value.name}</option>
-                                        )
-                                    }
-
-
-                                </select>
+  {Array.isArray(teamLeader) &&
+    [...teamLeader] // copy array, original state mutate na ho
+      .sort((a, b) => a.name.localeCompare(b.name)) // A → Z sorting
+      .map((value, key) => (
+        <option key={key} value={value.user_id}>
+          {value.name}
+        </option>
+      ))
+  }
+</select>
                             </div>
                             <div className="col-md-6 mb-3">
                                 <label>Select Agent</label>
@@ -500,7 +513,7 @@ if(res.data.status==200){
                                     backgroundColor: "#f9f9f9",
                                     color: "#333",
                                     cursor: "pointer",
-                                }} min={new Date().toISOString().split("T")[0]} value={scheduleSiteDate} onChange={(e) => setScheduleSiteDate(e.target.value)} />
+                                }} min={new Date().toISOString().split("T")[0]} value={scheduleSiteDate||currentvisit || ""} onChange={(e) => setScheduleSiteDate(e.target.value)} />
 
                             </div>
 
@@ -514,10 +527,10 @@ if(res.data.status==200){
                                     backgroundColor: "#f9f9f9",
                                     color: "#333",
                                     cursor: "pointer",
-                                }} min={new Date().toISOString().split("T")[0]} value={officeVisitDate} onChange={(e) => setOfficeVisitDate(e.target.value)} />
+                                }} min={new Date().toISOString().split("T")[0]} value={officeVisitDate ||officevisit || ""} onChange={(e) => setOfficeVisitDate(e.target.value)} />
 
                             </div>
-                            <div className="col-md-6 mb-3">
+                            {/* <div className="col-md-6 mb-3">
                                 <label style={{ display: "block" }}>Mid Way Visit completed</label>
                                 <input type="date" style={{
                                     padding: "8px 12px",
@@ -531,8 +544,8 @@ if(res.data.status==200){
                                     min={new Date().toISOString().split("T")[0]}
                                     value={midWayDate}
                                     onChange={(e) => setMidWayDate(e.target.value)} />
-                            </div>
-                            <div className="col-md-6 mb-3">
+                            </div> */}
+               <div className="col-md-6 mb-3">
                                 <label style={{ display: "block" }}>House Visit Complete</label>
                                 <input type="date" style={{
                                     padding: "8px 12px",
@@ -542,9 +555,8 @@ if(res.data.status==200){
                                     backgroundColor: "#f9f9f9",
                                     color: "#333",
                                     cursor: "pointer",
-                                }} min={new Date().toISOString().split("T")[0]} value={houseVisitDate} onChange={(e) => setHouseVisitDate(e.target.value)} />
+                                }} min={new Date().toISOString().split("T")[0]} value={houseVisitDate||housevisit || ""} onChange={(e) => setHouseVisitDate(e.target.value)} />
                             </div>
-
                             <div className="col-md-7 mb-3">
                                 <label>Lead Status</label>
                                 <select className="form-select" value={leadStatus} onChange={(e) => setLeadStatus(e.target.value)}>

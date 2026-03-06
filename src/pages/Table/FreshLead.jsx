@@ -135,8 +135,8 @@ console.log(meta)
 
       const list = res?.data?.data || [];
       const meta = res?.data?.meta;
-      // console.log(list)
-console.log(meta)
+      console.log(list)
+
       const mapped = list.map((item, index) => ({
         serialNO: (page - 1) * rowsPerPage + index + 1,
         id: item.id,
@@ -147,8 +147,9 @@ console.log(meta)
         city: item.city,
         leadSource: item.lead_source,
         project: item.form_name,
+        duplicatestatus:item.duplicate
       }));
-
+console.log(mapped,"mapped")
       setData(mapped);
       setCurrentPage(meta?.current_page || 1);
       setTotalPages(meta?.last_page || 1);
@@ -240,7 +241,8 @@ console.log(meta)
     { field: "city", headerName: "City" },
     { field: "contactNumber", headerName: "Contact Number" },
     { field: "leadSource", headerName: "Lead Source" },
-    { field: "project", headerName: "Project" }
+    { field: "project", headerName: "Project" },
+       { field: "duplicatestatus", headerName: "duplicatestatus" },
   ];
   // console.log(user)
 // const handleSearchProject=()=>{
@@ -263,12 +265,17 @@ console.log(meta)
       </div>
 <div style={{display:"flex",gap:10, alignItems: "center"}}>
   <p className="mb-0" style={{fontSize:12}}>Assign To</p>
-        <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
-          <option value="">Select Team Leader</option>
-          {teamLeaders.map(tl => (
-            <option key={tl.user_id} value={tl.user_id}>{tl.name}</option>
-          ))}
-        </select>
+      <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
+  <option value="">Select Team Leader</option>
+  {[...teamLeaders]  // copy banate hain taaki original array mutate na ho
+    .sort((a, b) => a.name.localeCompare(b.name))  // A → Z sorting
+    .map(tl => (
+      <option key={tl.user_id} value={tl.user_id}>
+        {tl.name}
+      </option>
+    ))
+  }
+</select>
 
         <select onChange={handleAgentChange} value={filters.agentId}>
           <option value="">Select Agent</option>

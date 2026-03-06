@@ -293,12 +293,17 @@ function getPageNumbers(currentPage, totalPages) {
         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
           <label>
         
-            <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
-              <option value="">Select Team Leader</option>
-              {teamLeaders.map(tl => (
-                <option key={tl.user_id} value={tl.user_id}>{tl.name}</option>
-              ))}
-            </select>
+          <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
+  <option value="">Select Team Leader</option>
+  {[...teamLeaders]  // copy banai taaki original array mutate na ho
+    .sort((a, b) => a.name.localeCompare(b.name))  // A → Z sorting
+    .map(tl => (
+      <option key={tl.user_id} value={tl.user_id}>
+        {tl.name}
+      </option>
+    ))
+  }
+</select>
           </label>
 
           <label>
@@ -385,12 +390,17 @@ function getPageNumbers(currentPage, totalPages) {
         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
           <label>
         
-            <select value={transferFilters.teamLeaderId} onChange={handleTransferTLChange}>
-              <option value="">Select Team Leader</option>
-              {teamLeaders.map(tl => (
-                <option key={tl.user_id} value={tl.user_id}>{tl.name}</option>
-              ))}
-            </select>
+          <select value={transferFilters.teamLeaderId} onChange={handleTransferTLChange}>
+  <option value="">Select Team Leader</option>
+  {[...teamLeaders]  // array ki copy banai, original state mutate na ho
+    .sort((a, b) => a.name.localeCompare(b.name))  // A → Z sorting
+    .map(tl => (
+      <option key={tl.user_id} value={tl.user_id}>
+        {tl.name}
+      </option>
+    ))
+  }
+</select>
           </label>
 
           <label>
