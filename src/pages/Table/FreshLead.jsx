@@ -242,7 +242,7 @@ console.log(mapped,"mapped")
     { field: "contactNumber", headerName: "Contact Number" },
     { field: "leadSource", headerName: "Lead Source" },
     { field: "project", headerName: "Project" },
-       { field: "duplicatestatus", headerName: "duplicatestatus" },
+       
   ];
   // console.log(user)
 // const handleSearchProject=()=>{

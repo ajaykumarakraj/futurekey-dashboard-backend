@@ -33,6 +33,7 @@ import Reassign from './pages/Table/Reassign';
 import LeadTransfer from './pages/Table/LeadTransfer';
 import SearchAllData from './pages/Table/SearchAllData';
 import CompleteSite from './pages/Table/CompleteSite';
+import DuplicateLead from './pages/Table/DuplicateLead';
 
 const App = () => {
   return (
@@ -72,6 +73,7 @@ const App = () => {
         <Route path="/user/form" element={<UserForm />} />
         <Route path="/user/update/:id" element={<UpdateUserForm />} />
         <Route path="/lead-update/:id" element={<UpdateLeadForm />} />
+        
         <Route path="/table" element={<CustomTable />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/support" element={<ContactSupport />} />
@@ -79,6 +81,7 @@ const App = () => {
         <Route path='/connect-form' element={<ConnectForm />} />
         <Route path="/lead/searchalldata" element={<SearchAllData/>}/>
         <Route path="/leads/completesite" element={<CompleteSite/>}/>
+          <Route path="/duplicate-lead/:contactNumber" element={<DuplicateLead/>} />
       </Route>
 
       {/* Fallback */}

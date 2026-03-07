@@ -38,7 +38,7 @@ const navigate = useNavigate();
   );
 
   // const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-
+console.log(paginatedData ,"check")
   return (
     <div className="table-wrapper">
       <table className="custom-table">
@@ -64,7 +64,7 @@ const navigate = useNavigate();
     paginatedData.map((row, i) => (
      <tr
   key={i}
-  onClick={() => row.duplicatestatus && navigate(`/duplicate-lead/${row.id}`)}
+  onClick={() => row.duplicatestatus && navigate(`/duplicate-lead/${row.contactNumber}`)}
   style={{
     backgroundColor: row.duplicatestatus ? "#ffe6e6" : "",
     color: row.duplicatestatus ? "#b30000" : "",
