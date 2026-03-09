@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import MiniDrawer from './comman/MiniDrawer';
 
 import WalkUpload from './pages/WalkUpload';
-import CustomTable from './pages/Table/customtable';
+import UserReusabletable from './pages/Table/UserReusabletable';
 import ChangePassword from './pages/ChangePassword';
 import ContactSupport from './pages/ContactSupport';
 import Dashboard from './pages/Dashboard';
@@ -68,13 +68,13 @@ const App = () => {
         <Route path="/leads/create" element={<CreateForm />} />
         <Route path="/leads/reassign" element={<Reassign/>}/>
         <Route path="/leads/bulk-upload" element={<WalkUpload />} />
-        <Route path="/leads/table" element={<CustomTable />} />
+        {/* <Route path="/leads/table" element={<CustomTable />} /> */}
         <Route path="/user/table" element={<UserMangementTable />} />
         <Route path="/user/form" element={<UserForm />} />
         <Route path="/user/update/:id" element={<UpdateUserForm />} />
         <Route path="/lead-update/:id" element={<UpdateLeadForm />} />
         
-        <Route path="/table" element={<CustomTable />} />
+        <Route path="/table" element={<UserReusabletable />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/support" element={<ContactSupport />} />
         <Route path="/mastersetting" element={<MasterSetting />} />

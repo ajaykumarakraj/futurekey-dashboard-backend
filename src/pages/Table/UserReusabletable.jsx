@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Example from "./Example";
+import LeadReusabletable from "./LeadReusabletable";
 import api from "../../component/api";
 import { useAuth } from "../../component/AuthContext";
-const CustomTable = () => {
+const UserReusabletable = () => {
   const [filters, setFilters] = useState({ teamLeader: "", agent: "", leadSource: "", project: "", customer: "", dateFrom: "", dateTo: "", sortBy: "newest" });
   const [data, setData] = useState([]);
 
@@ -154,7 +154,7 @@ const CustomTable = () => {
       </div>
 
       {/* Table Section */}
-      <Example data={data} columns={columns} rowsPerPageOptions={[50]} />
+      <LeadReusabletable data={data} columns={columns} rowsPerPageOptions={[50]} />
 
       {/* Enhanced Pagination Section */}
       <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
@@ -191,4 +191,4 @@ const CustomTable = () => {
   )
 };
 
-export default CustomTable;
+export default UserReusabletable;

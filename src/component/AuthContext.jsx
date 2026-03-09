@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
   const [token, setToken] = useState(() => localStorage.getItem('token') || '');
   // console.log("User:", user);
-  console.log("Token:", token);
+  // console.log("Token:", token);
   const login = ({ user, token }) => {
     setUser(user);
     setToken(token);

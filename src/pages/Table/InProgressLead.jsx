@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Example from "./Example";
+import LeadReusabletable from "./LeadReusabletable";
 import api from "../../component/api";
 import moment from "moment";
 import { useAuth } from "../../component/AuthContext";
@@ -301,7 +301,7 @@ try {
         </form>
       </div>
 
-      <Example data={data} columns={columns} rowsPerPageOptions={[50]} />
+      <LeadReusabletable data={data} columns={columns} rowsPerPageOptions={[50]} />
 
       <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>
         <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1}>

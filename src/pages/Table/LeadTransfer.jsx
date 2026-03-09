@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Example from "./Example";
+import LeadReusabletable from "./LeadReusabletable";
 import api from "../../component/api";
 import moment from "moment";
 import axios from "axios";
@@ -353,7 +353,7 @@ function getPageNumbers(currentPage, totalPages) {
       </div>
 
       {/* Table Section */}
-      <Example data={data} columns={columns} rowsPerPageOptions={[50]} />
+      <LeadReusabletable data={data} columns={columns} rowsPerPageOptions={[50]} />
 
       {/* Pagination Section */}
       <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>

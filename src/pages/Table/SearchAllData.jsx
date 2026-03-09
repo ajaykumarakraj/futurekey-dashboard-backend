@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../component/api";
-import Example from "./Example";
+import LeadReusabletable from "./LeadReusabletable";
 import moment from "moment";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -25,7 +25,7 @@ handleSearch()
   const handleSearch = async (page = 1) => {
     try {
       const payload = {  page,search_value:query};
-      console.log(payload)
+      // console.log(payload)
       const token = localStorage.getItem("token");
 
       const res = await api.post("/search-lead", payload, {
@@ -33,7 +33,7 @@ handleSearch()
       });
 
       const result = res?.data?.data;
-      console.log("get lead dataa",result)
+      // console.log("get lead dataa",result)
       if (res.status === 200 && Array.isArray(result)) {
         const mapped = result.map((item, index) => ({
           id: (page - 1) * rowsPerPage + index + 1,
@@ -120,7 +120,7 @@ handleSearch()
      
 
       {/* Table */}
-      <Example data={data} columns={columns} rowsPerPageOptions={[rowsPerPage]} />
+      <LeadReusabletable data={data} columns={columns} rowsPerPageOptions={[rowsPerPage]} />
 
       {/* Pagination */}
       <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>

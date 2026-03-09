@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Example from "../Table/Example";
+import LeadReusabletable from "../Table/LeadReusabletable";
 import api from "../../component/api";
 import { useNavigate } from "react-router-dom";
 
@@ -126,7 +126,7 @@ setLoginstatus(value)
             {loading ? (
                 <p style={{ textAlign: "center" }}>Loading...</p>
             ) : (
-                <Example data={data} columns={columns} rowsPerPageOptions={[1000]} />
+                <LeadReusabletable data={data} columns={columns} rowsPerPageOptions={[1000]} />
             )}
 
             {/* Pagination Section */}

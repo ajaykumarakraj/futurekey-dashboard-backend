@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../../component/api";
 import axios from "axios";
-import Example from "./Example";
+import LeadReusabletable from "./LeadReusabletable";
 import "../../app.css";
 import moment from "moment";
 import { useSearchParams } from "react-router-dom";
@@ -86,7 +86,7 @@ const project = searchParams.get("project");
 const handleSearchProject = async (e,page = 1) => {
     const selectedValue = e.target.value;
     setSearch(selectedValue)
-  console.log(selectedValue,"selectproject")
+  // console.log(selectedValue,"selectproject")
     try {
      
       const payload = {
@@ -99,8 +99,8 @@ const handleSearchProject = async (e,page = 1) => {
 
       const list = res?.data?.data || [];
       const meta = res?.data?.meta;
-      console.log(list)
-console.log(meta)
+//       console.log(list)
+// console.log(meta)
       const mapped = list.map((item, index) => ({
         serialNO: (page - 1) * rowsPerPage + index + 1,
         id: item.id,
@@ -135,7 +135,7 @@ console.log(meta)
 
       const list = res?.data?.data || [];
       const meta = res?.data?.meta;
-      console.log(list)
+      // console.log(list)
 
       const mapped = list.map((item, index) => ({
         serialNO: (page - 1) * rowsPerPage + index + 1,
@@ -149,7 +149,7 @@ console.log(meta)
         project: item.form_name,
         duplicatestatus:item.duplicate
       }));
-console.log(mapped,"mapped")
+// console.log(mapped,"mapped")
       setData(mapped);
       setCurrentPage(meta?.current_page || 1);
       setTotalPages(meta?.last_page || 1);
@@ -164,7 +164,7 @@ console.log(mapped,"mapped")
       alert("Please select a Team Leader first.");
       return;
     }
-    console.log("run")
+    // console.log("run")
     const payload = {
       lead_id: selectedLeads,
       tl_id: filters.teamLeaderId,
@@ -172,12 +172,12 @@ console.log(mapped,"mapped")
       project_id: filters.projectId,
       user_id: user.user_id
     };
-    console.log("check", payload)
+    // console.log("check", payload)
     try {
       const res = await api.post("/assign-lead", payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      console.log(res)
+      // console.log(res)
       if (res.data.status === 200) {
         alert("Leads transferred!");
         setSelectedLeads([]);
@@ -299,7 +299,7 @@ console.log(mapped,"mapped")
         </div>
       </div>
 
-      <Example data={data} columns={columns} rowsPerPageOptions={[rowsPerPage]} />
+      <LeadReusabletable data={data} columns={columns} rowsPerPageOptions={[rowsPerPage]} />
 
        {/* Pagination */}
       <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>
