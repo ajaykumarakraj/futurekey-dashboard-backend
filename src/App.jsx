@@ -34,6 +34,7 @@ import LeadTransfer from './pages/Table/LeadTransfer';
 import SearchAllData from './pages/Table/SearchAllData';
 import CompleteSite from './pages/Table/CompleteSite';
 import DuplicateLead from './pages/Table/DuplicateLead';
+import DashboardSearch from './pages/DashboardSearch';
 
 const App = () => {
   return (
@@ -52,8 +53,9 @@ const App = () => {
         }
       >
         <Route index element={<Dashboard />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="leads/fresh" element={<FreshLead />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/search" element={<DashboardSearch/>}/>
+        <Route path="/leads/fresh" element={<FreshLead />} />
           <Route path="/leads/lead-transfer" element={<LeadTransfer />} />
         <Route path="/leads/new" element={<NewLead />} />
         <Route path='/leads/inprogress' element={<InProgressLead />} />

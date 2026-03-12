@@ -148,6 +148,7 @@ try {
       const payload = { lead_status: "8", page,tl_id:tl,agent_id:agent,project:project };
       // You can add additional filters here:
       // teamLeader: filters.teamLeader, etc.
+      console.log(payload,"payload")
       const res = await api.post('/get-lead-data', payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });

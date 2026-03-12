@@ -10,8 +10,10 @@ const Dashboard = () => {
   const navigate = useNavigate();
    const [filters, setFilters] = useState({
       teamLeaderId: "",
+      agentName:"",
       agentId: "",
       projectId: "",
+      teamLeaderName: "",
       //   dateFrom: "",
       // dateTo: "",
       // status:""
@@ -42,18 +44,24 @@ const fetchTeamLeaders = async () => {
     }
   };
  const handleTeamLeaderChange = async (e) => {
-    const id = e.target.value;
-    setFilters(prev => ({ ...prev, teamLeaderId: id }));
-    try {
-      const res = await api.get(`/get-agent/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      setAgents(res.data.data);
-        // console.log(res.data.data)
-    } catch (err) {
-      console.error("Agent fetch error:", err);
-    }
-  };
+  const id = e.target.value;
+  const name = e.target.options[e.target.selectedIndex].text;
+
+  setFilters(prev => ({
+    ...prev,
+    teamLeaderId: id,
+    teamLeaderName: name
+  }));
+
+  try {
+    const res = await api.get(`/get-agent/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
+    setAgents(res.data.data);
+  } catch (err) {
+    console.error("Agent fetch error:", err);
+  }
+};
  const fetchProjects = async () => {
     try {
       const res = await api.get("/view-master-setting", {
@@ -70,9 +78,16 @@ const fetchTeamLeaders = async () => {
       console.error("Project fetch error:", err);
     }
   };
- const handleAgentChange = (e) => {
-    setFilters(prev => ({ ...prev, agentId: e.target.value }));
-  };
+const handleAgentChange = (e) => {
+  const id = e.target.value;
+  const name = e.target.options[e.target.selectedIndex].text;
+
+  setFilters(prev => ({
+    ...prev,
+    agentId: id,
+    agentName: name
+  }));
+};
   const handleProjectChange = (e) => {
     setFilters(prev => ({ ...prev, projectId: e.target.value }));
   };
@@ -86,12 +101,12 @@ const getsearchdata=async(page = 1)=>{
     project:filters.projectId||"",
 
     }
-  // console.log("post data",payload)
+  console.log("post data",payload)
 try {
   const res=await api.post("/get-home-screen-data",payload,{  
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }    
   })
-  // console.log("get data",res.data.data)
+  console.log("get data",res.data.data)
  setData(res.data.data || {});
      
   
@@ -117,6 +132,19 @@ const cards = [
   { title: "Converted", key: "converted", path: "/leads/converted", icon: " 🔄" },
   { title: "Complete Site Visit", key: "completed_site_visit", path: "/leads/completesite", icon: "✅" },
 ];
+
+
+// for filter data 
+
+const handleSearch = () => {
+
+  navigate(
+    `/dashboard/search?tl=${filters.teamLeaderId}&tlname=${filters.teamLeaderName}&agent=${filters.agentId}&agentname=${filters.agentName}&project=${filters.projectId}`
+  );
+
+};
+
+console.log(filters)
 
   return (
     <div className="dashboard-container">
@@ -165,7 +193,7 @@ const cards = [
 
 
 
-          <button type="button" onClick={() => getsearchdata(1)}>Search</button>
+         <button type="button" onClick={handleSearch}>Search</button>
         </form>
       </div>
      <div className="card-grid">

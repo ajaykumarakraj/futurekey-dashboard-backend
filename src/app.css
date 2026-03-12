@@ -452,3 +452,32 @@ button:hover {
 display: flex;
     justify-content: space-between;
 }
+.filter-info{
+  display:flex;
+  gap:20px;
+  padding:15px 20px;
+  background:#f8f9fb;
+  border-radius:8px;
+  border:1px solid #e2e6ea;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+
+.filter-item{
+  display:flex;
+  flex-direction:column;
+  min-width:150px;
+}
+
+.filter-label{
+  font-size:12px;
+  color:#6c757d;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.filter-value{
+  font-size:16px;
+  font-weight:600;
+  color:#2c3e50;
+}
