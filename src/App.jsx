@@ -35,6 +35,7 @@ import SearchAllData from './pages/Table/SearchAllData';
 import CompleteSite from './pages/Table/CompleteSite';
 import DuplicateLead from './pages/Table/DuplicateLead';
 import DashboardSearch from './pages/DashboardSearch';
+import Addon from './pages/Table/Add-on';
 
 const App = () => {
   return (
@@ -75,7 +76,7 @@ const App = () => {
         <Route path="/user/form" element={<UserForm />} />
         <Route path="/user/update/:id" element={<UpdateUserForm />} />
         <Route path="/lead-update/:id" element={<UpdateLeadForm />} />
-        
+        <Route path="/leads/add-on" element={<Addon/>}/>
         <Route path="/table" element={<UserReusabletable />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/support" element={<ContactSupport />} />

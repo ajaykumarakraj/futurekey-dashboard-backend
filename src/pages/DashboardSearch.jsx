@@ -15,7 +15,7 @@ const tl = params.get("tl");
 const agent = params.get("agent");
 const project = params.get("project");
 
-console.log(tl, agent, project,tlname,agentname);
+// console.log(tl, agent, project,tlname,agentname);
 
 
   const navigate = useNavigate();
@@ -53,12 +53,12 @@ const getsearchdata=async(page = 1)=>{
     project:project||"",
 
     }
-  console.log("post data",payload)
+  // console.log("post data",payload)
 try {
   const res=await api.post("/get-home-screen-data",payload,{  
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }    
   })
-  console.log("get data",res.data.data)
+  // console.log("get data",res.data.data)
  setData(res.data.data || {});
      
   

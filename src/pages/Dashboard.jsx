@@ -101,12 +101,12 @@ const getsearchdata=async(page = 1)=>{
     project:filters.projectId||"",
 
     }
-  console.log("post data",payload)
+  // console.log("post data",payload)
 try {
   const res=await api.post("/get-home-screen-data",payload,{  
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }    
   })
-  console.log("get data",res.data.data)
+  // console.log("get data",res.data.data)
  setData(res.data.data || {});
      
   
@@ -131,6 +131,7 @@ const cards = [
   { title: "Archived Lead", key: "archived_lead", path: "/leads/archived", icon: "🗄️" },
   { title: "Converted", key: "converted", path: "/leads/converted", icon: " 🔄" },
   { title: "Complete Site Visit", key: "completed_site_visit", path: "/leads/completesite", icon: "✅" },
+   
 ];
 
 
@@ -144,7 +145,7 @@ const handleSearch = () => {
 
 };
 
-console.log(filters)
+// console.log(filters)
 
   return (
     <div className="dashboard-container">
@@ -154,7 +155,8 @@ console.log(filters)
       </div>
 {/* Filters */}
       <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
-        <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+       <div className="box">
+         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
         <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
   <option value="">Select Team Leader</option>
   {[...teamLeaders]
@@ -195,6 +197,8 @@ console.log(filters)
 
          <button type="button" onClick={handleSearch}>Search</button>
         </form>
+       
+       </div>
       </div>
      <div className="card-grid">
   {cards.map((card, index) => (

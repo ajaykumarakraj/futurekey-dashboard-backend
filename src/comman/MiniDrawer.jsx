@@ -322,7 +322,23 @@ export default function MiniDrawer() {
               </Link>
             </li>
 
-
+ <li style={{ marginBottom: '15px' }}>
+              <Link
+                to="/leads/add-on"
+                style={{
+                  fontSize: "12px",
+                  color: 'white', textDecoration: 'none',
+                  display: 'flex', alignItems: 'center',
+                  padding: '10px', borderRadius: '5px',
+                  background: location.pathname === "/leads/add-on" ? "#003961" : "none",
+                  transition: 'background 0.3s'
+                }}
+                onMouseOver={(e) => e.target.style.background = "#003961"}
+                onMouseOut={(e) => e.target.style.background = location.pathname === "/leads/add-on" ? "#003961" : "none"}
+              >
+               ➕ Add on Client
+              </Link>
+            </li>
 
 
             <button

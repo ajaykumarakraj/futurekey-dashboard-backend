@@ -481,3 +481,8 @@ display: flex;
   font-weight:600;
   color:#2c3e50;
 }
+.box{
+    display: flex;
+    justify-content: space-between;
+
+}
