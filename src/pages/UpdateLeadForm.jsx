@@ -188,7 +188,7 @@ const UpdateLeadForm = () => {
                 }
             })
             if (res.data.status === 200) {
-                // console.log("fetchdata", res.data)
+                console.log("fetchdata", res.data)
                 const fetchdata = res.data.data
 
                 setName(fetchdata.name||"")
@@ -269,7 +269,7 @@ const UpdateLeadForm = () => {
             lead_status: leadStatus,
 
         };
-        // console.log("post for update", formData)
+        console.log("post for update", formData)
         try {
             const res = await api.post("/update-lead", formData, {
                 headers: {
@@ -513,7 +513,9 @@ if(res.data.status==200){
                                     backgroundColor: "#f9f9f9",
                                     color: "#333",
                                     cursor: "pointer",
-                                }} min={new Date().toISOString().split("T")[0]} value={scheduleSiteDate||currentvisit || ""} onChange={(e) => setScheduleSiteDate(e.target.value)} />
+                                }}
+                                //  min={new Date().toISOString().split("T")[0]}
+                                  value={scheduleSiteDate||currentvisit || ""} onChange={(e) => setScheduleSiteDate(e.target.value)} />
 
                             </div>
 
@@ -527,7 +529,9 @@ if(res.data.status==200){
                                     backgroundColor: "#f9f9f9",
                                     color: "#333",
                                     cursor: "pointer",
-                                }} min={new Date().toISOString().split("T")[0]} value={officeVisitDate ||officevisit || ""} onChange={(e) => setOfficeVisitDate(e.target.value)} />
+                                }}
+                                //  min={new Date().toISOString().split("T")[0]} 
+                                 value={officeVisitDate ||officevisit || ""} onChange={(e) => setOfficeVisitDate(e.target.value)} />
 
                             </div>
                             {/* <div className="col-md-6 mb-3">
@@ -555,7 +559,9 @@ if(res.data.status==200){
                                     backgroundColor: "#f9f9f9",
                                     color: "#333",
                                     cursor: "pointer",
-                                }} min={new Date().toISOString().split("T")[0]} value={houseVisitDate||housevisit || ""} onChange={(e) => setHouseVisitDate(e.target.value)} />
+                                }}
+                                //  min={new Date().toISOString().split("T")[0]}
+                                  value={houseVisitDate||housevisit || ""} onChange={(e) => setHouseVisitDate(e.target.value)} />
                             </div>
                             <div className="col-md-7 mb-3">
                                 <label>Lead Status</label>

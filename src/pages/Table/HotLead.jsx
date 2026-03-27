@@ -15,6 +15,7 @@ const HotLead = () => {
       dateTo: "",
       status:""
     });
+    const [isSearching, setIsSearching] = useState(false);
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -87,6 +88,7 @@ const handleStatus = (e) => {
     setFilters(prev => ({ ...prev, status: e.target.value }));
   };
 const getsearchdata=async(page = 1)=>{
+ setIsSearching(true);
   
 
     const payload={
@@ -95,7 +97,8 @@ const getsearchdata=async(page = 1)=>{
     lead_status:filters.status,
     project:filters.projectId,
     from_date:filters.dateFrom,
-    to_date:filters.dateTo
+    to_date:filters.dateTo,
+     page: page  
     }
   // console.log("post data",payload)
 try {
@@ -138,7 +141,8 @@ try {
 }
 }
 // end search data section 
-  const handleSearch = async (page = 1) => {
+   const handleSearch = async (page = 1) => {
+     setIsSearching(false); 
     try {
       const payload = { lead_status: "3", page, tl_id:tl,agent_id:agent,project:project };
       // console.log("gdfgdfgfhf",payload)
@@ -181,9 +185,15 @@ try {
     handleSearch(1);
   }, []);
 
-  const handlePageChange = (newPage) => {
-    handleSearch(newPage);
-  };
+   const handlePageChange = (page) => {
+  if (page >= 1 && page <= totalPages) {
+    if (isSearching) {
+      getsearchdata(page);   // 🔍 search pagination
+    } else {
+      handleSearch(page);    // 📄 normal pagination
+    }
+  }
+};
 
   const columns = [
     { field: "id", headerName: "#", align: "center" },
@@ -288,7 +298,7 @@ try {
       </div>
 
       {/* Table Section */}
-      <LeadReusabletable data={data} columns={columns} rowsPerPageOptions={[10]} />
+      <LeadReusabletable data={data} columns={columns} rowsPerPageOptions={[50]} />
 
       {/* Pagination Section */}
       <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
