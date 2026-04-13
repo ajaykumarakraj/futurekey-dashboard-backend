@@ -3,108 +3,125 @@ import LeadReusabletable from "./LeadReusabletable";
 import api from "../../component/api";
 import moment from "moment";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../component/AuthContext";
-const ArchivedLead = () => {
-   const [searchParams] = useSearchParams();
- const [filters, setFilters] = useState({
+import { useSearchParams } from "react-router-dom";
+const LeadTransfer = () => {
+  const { user } = useAuth();
+  const [selectedLeads, setSelectedLeads] = useState([]);
+  const [filters, setFilters] = useState({
     teamLeaderId: "",
     agentId: "",
     projectId: "",
-      dateFrom: "",
+    dateFrom: "",
     dateTo: "",
-    status:""
+    status: ""
+  });
+  const [transferFilters, setTransferFilters] = useState({
+    teamLeaderId: "",
+    agentId: "",
+    transferstatus: ""
   });
   const [data, setData] = useState([]);
- const [isSearching, setIsSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [agentsTransfer, setAgentsTransfer] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalRecords, setTotalRecords] = useState(0);
-   const [teamLeaders, setTeamLeaders] = useState([]);
+  const [teamLeaders, setTeamLeaders] = useState([]);
   const [agents, setAgents] = useState([]);
-    const [projects, setProjects] = useState([]);
-    const tl = searchParams.get("tl");
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+const [searchParams] = useSearchParams();
+   const tl = searchParams.get("tl");
 const agent = searchParams.get("agent");
 const project = searchParams.get("project");
   const rowsPerPage = 50;
 
-//start search section all data 
- useEffect(() => {
+  // Fetch initial data
+  useEffect(() => {
     fetchTeamLeaders();
     fetchProjects();
-      handleSearch(1);
-    // fetchLeads(1);
   }, []);
-const fetchTeamLeaders = async () => {
+
+  const fetchTeamLeaders = async () => {
+    setLoading(true);
     try {
       const res = await api.get("/get-team-leader", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setTeamLeaders(res.data.data);
-      // console.log(res.data.data)
     } catch (err) {
-      console.error("Team Leader fetch error:", err);
+      setErrorMessage("Failed to fetch team leaders.");
+    } finally {
+      setLoading(false);
     }
   };
- const handleTeamLeaderChange = async (e) => {
+
+  const handleTeamLeaderChange = async (e) => {
     const id = e.target.value;
     setFilters(prev => ({ ...prev, teamLeaderId: id }));
+    setLoading(true);
     try {
       const res = await api.get(`/get-agent/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setAgents(res.data.data);
-        // console.log(res.data.data)
     } catch (err) {
-      console.error("Agent fetch error:", err);
+      setErrorMessage("Failed to fetch agents.");
+    } finally {
+      setLoading(false);
     }
   };
- const fetchProjects = async () => {
+
+  const fetchProjects = async () => {
+    setLoading(true);
     try {
       const res = await api.get("/view-master-setting", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-     
       const projectList = res.data.data.filter(item => item.cat_name === "Project");
-
       setProjects(projectList);
-      //  const leadsource = res.data.data.filter(item => item.cat_name === "Lead Source");
-      //  setLeadSource(leadsource)
-
     } catch (err) {
-      console.error("Project fetch error:", err);
+      setErrorMessage("Failed to fetch projects.");
+    } finally {
+      setLoading(false);
     }
   };
- const handleAgentChange = (e) => {
+
+  const handleAgentChange = (e) => {
     setFilters(prev => ({ ...prev, agentId: e.target.value }));
   };
+
   const handleProjectChange = (e) => {
     setFilters(prev => ({ ...prev, projectId: e.target.value }));
   };
-const handleStatus = (e) => {
+
+  const handleStatus = (e) => {
     setFilters(prev => ({ ...prev, status: e.target.value }));
   };
-const getsearchdata=async(page = 1)=>{
- setIsSearching(true);
-  
 
-    const payload={
-    tl_id:filters.teamLeaderId,
-    agent_id:filters.agentId,
-    lead_status:filters.status,
-    project:filters.projectId,
-    from_date:filters.dateFrom,
-    to_date:filters.dateTo,
-     page: page  
-    }
-  // console.log("post data",payload)
-try {
-  const res=await api.post("/search-agent-data",payload,{  
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }    
-  })
-  // console.log("search data",res.data.data)
- const result = res?.data?.data;
-      // console.log(result)
+  const getsearchdata = async (page = 1) => {
+     setIsSearching(true);
+    // if (!filters.teamLeaderId) {
+    //   setErrorMessage("Please select a Team Leader first.");
+    //   return;
+    // }
+    setLoading(true);
+    setErrorMessage("");
+    const payload = {
+      tl_id: filters.teamLeaderId,
+      agent_id: filters.agentId,
+      lead_status: filters.status,
+      project: filters.projectId,
+      from_date: filters.dateFrom,
+      to_date: filters.dateTo,
+       page: page
+    };
+    try {
+      const res = await api.post("/search-agent-data", payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      const result = res?.data?.data;
       if (res.status === 200 && Array.isArray(result)) {
         const mapped = result.map((item, index) => ({
           id: (page - 1) * rowsPerPage + index + 1,
@@ -124,28 +141,27 @@ try {
           lastUpdate: item.updated_at,
           observation: item.remark,
         }));
-
         setData(mapped);
         setCurrentPage(res.data.meta?.current_page || 1);
         setTotalPages(res.data.meta?.last_page || 1);
-        setTotalRecords(res.data.meta?.total || 0);
       } else {
         setData([]);
       }
-  
-} catch (error) {
-  console.log(error)
-}
-}
-// end search data section 
-
+    } catch (error) {
+      setErrorMessage("Failed to fetch search data.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }))
+    setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-   const handleSearch = async (page = 1) => {
+
+// BY default data 
+const handleSearch = async (page = 1) => {
      setIsSearching(false); 
     try {
       const payload = { lead_status: "4", page,tl_id:tl,agent_id:agent,project:project };
@@ -156,7 +172,7 @@ try {
       });
 
       if (res?.status === 200 && Array.isArray(res?.data?.data)) {
-        // console.log(res.data.data)
+        console.log(res.data.data)
         const mapped = res?.data?.data?.map((item, index) => ({
 
           id: (page - 1) * 50 + index + 1,
@@ -179,7 +195,7 @@ try {
         setData(mapped);
         setCurrentPage(res?.data?.meta?.current_page);
         setTotalPages(res?.data?.meta?.last_page);
-        setTotalRecords(res?.data?.meta?.total);
+        // setTotalRecords(res?.data?.meta?.total);
       } else {
         console.error('API did not return an array');
         setData([]);
@@ -195,17 +211,96 @@ try {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-   const handlePageChange = (page) => {
-  if (page >= 1 && page <= totalPages) {
-    if (isSearching) {
-      getsearchdata(page);   // 🔍 search pagination
-    } else {
-      handleSearch(page);    // 📄 normal pagination
+
+// BY default data end
+
+
+
+
+
+
+  // Transfer section
+  const handleTransferTLChange = async (e) => {
+    const id = e.target.value;
+    setTransferFilters(prev => ({ ...prev, teamLeaderId: id }));
+    setLoading(true);
+    try {
+      const res = await api.get(`/get-agent/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      setAgentsTransfer(res.data.data);
+    } catch (err) {
+      setErrorMessage("Failed to fetch agents for transfer.");
+    } finally {
+      setLoading(false);
     }
-  }
-};
+  };
+
+  const handleTransferAgentChange = (e) => {
+    setTransferFilters(prev => ({ ...prev, agentId: e.target.value }));
+  };
+
+  const handleTransferStatus = (e) => {
+    setTransferFilters(prev => ({ ...prev, transferstatus: e.target.value }));
+  };
+
+  const handleTransfer = async () => {
+    if (!transferFilters.teamLeaderId) {
+      alert("Please select a Team Leader for transfer.");
+      return;
+    }
+    setLoading(true);
+    setErrorMessage("");
+    const payload = {
+      lead_id: selectedLeads,
+      to_tl_id: transferFilters.teamLeaderId,
+      to_agent_id: transferFilters.agentId,
+      lead_status: transferFilters.transferstatus,
+      user_id: user.user_id,
+    };
+    console.log(payload)
+    try {
+      const res = await api.post("/transfer-agent-lead", payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      if (res?.status === 200) {
+        alert("Leads transferred successfully!");
+        setSelectedLeads([]);
+        getsearchdata(currentPage);
+      } else {
+        setErrorMessage("Transfer failed.");
+      }
+    } catch (err) {
+      setErrorMessage("Something went wrong during transfer.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const columns = [
+    {
+      field: "select",
+      headerName: (
+        <input
+          type="checkbox"
+          checked={data.length && selectedLeads.length === data.length}
+          onChange={(e) =>
+            setSelectedLeads(e.target.checked ? data.map(row => row.customerId) : [])
+          }
+        />
+      ),
+      renderCell: (row) => (
+        <input
+          type="checkbox"
+          checked={selectedLeads.includes(row.customerId)}
+          onChange={(e) => {
+            setSelectedLeads(prev =>
+              e.target.checked ? [...prev, row.customerId] : prev.filter(id => id !== row.customerId)
+            );
+          }}
+        />
+      )
+    },
     { field: "id", headerName: "#", align: "center" },
     { field: "enterDate", headerName: "Entry Date", align: "center" },
     {
@@ -235,86 +330,99 @@ try {
     { field: "observation", headerName: "Observation", align: "left" },
   ];
 
-  function getPageNumbers(currentPage, totalPages) {
-    const pageNumbers = [];
+ const handlePageChange = (page) => {
+  if (page >= 1 && page <= totalPages) {
+    setCurrentPage(page);   // 👈 ye missing ho sakta hai
+    getsearchdata(page);
+  }
+};
 
-    const start = Math.max(1, currentPage - 2);
-    const end = Math.min(totalPages, currentPage + 2);
+function getPageNumbers(currentPage, totalPages) {
+  const pageNumbers = [];
+  const start = Math.max(1, currentPage - 2);
+  const end = Math.min(totalPages, currentPage + 2);
 
-    for (let i = start; i <= end; i++) {
-      pageNumbers.push(i);
-    }
-    return pageNumbers;
+  for (let i = start; i <= end; i++) {
+    pageNumbers.push(i);
   }
 
+  return pageNumbers;
+}
   return (
     <div>
       <h2 className="mb-2 text-center textsize headingstyle">Archived Leads</h2>
+      {errorMessage && <p style={{ color: "red", textAlign: "center" }}>{errorMessage}</p>}
+      {loading && <p style={{ textAlign: "center" }}>Loading...</p>}
+
       {/* Filter Section */}
       <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-        <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
+          <label>
+        
+          <select onChange={handleTeamLeaderChange} value={filters.teamLeaderId}>
   <option value="">Select Team Leader</option>
-  {[...teamLeaders]
-    .sort((a, b) => a.name.localeCompare(b.name))
+  {[...teamLeaders]  // copy banai taaki original array mutate na ho
+    .sort((a, b) => a.name.localeCompare(b.name))  // A → Z sorting
     .map(tl => (
       <option key={tl.user_id} value={tl.user_id}>
         {tl.name}
       </option>
-    ))}
+    ))
+  }
 </select>
+          </label>
 
-<select onChange={handleAgentChange} value={filters.agentId}>
-  <option value="">Select Agent</option>
-  {[...agents]
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map(a => (
-      <option key={a.id} value={a.id}>
-        {a.name}
-      </option>
-    ))}
-</select>
+          <label>
+        
+            <select onChange={handleAgentChange} value={filters.agentId}>
+              <option value="">Select Agent</option>
+              {agents.map(a => (
+                <option key={a.id} value={a.id}>{a.name}</option>
+              ))}
+            </select>
+          </label>
 
-          {/* <select name="leadSource" value={filters.leadSource} onChange={handleFilterChange}>
-            <option value="">Lead Source</option>
-     {leadSource.map(p => (
-            <option key={p.cat_value} value={p.cat_value}>{p.cat_value}</option>
-          ))}
-          </select> */}
-  <select onChange={handleStatus} >
-          <option value="">Select Leads Status</option>         
-            <option  value="1">New Lead</option>
-            <option  value="11">Reassign Leads</option>
-            <option  value="2">In Progress Leads</option>
-            <option  value="3">Hot Leads</option>
+          <label>
+           
+            <select onChange={handleStatus} value={filters.status}>
+              <option value="">Select Lead Status</option>
+              <option value="1">New Lead</option>
+              <option value="11">Reassign Leads</option>
+              <option value="2">In Progress Leads</option>
+              <option value="3">Hot Leads</option>
+              {/* <option value="0">Fresh Leads</option> */}
+              <option value="4">Archived Leads</option>
+              <option value="5">Converted Leads</option>
+            </select>
+          </label>
+
+          <label>
+           
+            <select onChange={handleProjectChange} value={filters.projectId}>
+              <option value="">Select Project</option>
+              {projects.map(p => (
+                <option key={p.cat_value} value={p.cat_value}>{p.cat_value}</option>
+              ))}
+            </select>
+          </label>
+
          
-            <option  value="4">Archived Leads</option>
-            <option  value="5">Converted Leads</option>
-        </select>
-          <select onChange={handleProjectChange} value={filters.projectId}>
-          <option value="">Select Project</option>
-          {projects.map(p => (
-            <option key={p.cat_value} value={p.cat_value}>{p.cat_value}</option>
-          ))}
-        </select>
+            <input name="dateFrom" type="date" value={filters.dateFrom} onChange={handleFilterChange} />
+        
 
-    
+         
+            <input name="dateTo" type="date" value={filters.dateTo} onChange={handleFilterChange} />
+        
 
-          <input name="dateFrom" type="date" placeholder="From" value={filters.dateFrom} onChange={handleFilterChange} />
-          <input name="dateTo" type="date" placeholder="To"  value={filters.dateTo} onChange={handleFilterChange} />
-
-     
-
-          <button type="button" onClick={() => getsearchdata(1)}>Search</button>
+          <button type="button" className="search-btn" onClick={() => getsearchdata(1)}>Search</button>
         </form>
       </div>
 
       {/* Table Section */}
       <LeadReusabletable data={data} columns={columns} rowsPerPageOptions={[50]} />
 
-      {/* Enhanced Pagination Section */}
+      {/* Pagination Section */}
       <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-        {/* Prev Button */}
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage <= 1}
@@ -323,7 +431,6 @@ try {
           Prev
         </button>
 
-        {/* Numbered Pages */}
         {getPageNumbers(currentPage, totalPages).map((page) => (
           <button
             key={page}
@@ -334,7 +441,6 @@ try {
           </button>
         ))}
 
-        {/* Next Button */}
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
@@ -343,8 +449,59 @@ try {
           Next
         </button>
       </div>
+
+      {/* Transfer Section */}
+      <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px",marginTop:"20px" }}>
+        <p>Select For Transfer Leads</p>
+        <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+          <label>
+        
+          <select value={transferFilters.teamLeaderId} onChange={handleTransferTLChange}>
+  <option value="">Select Team Leader</option>
+  {[...teamLeaders]  // array ki copy banai, original state mutate na ho
+    .sort((a, b) => a.name.localeCompare(b.name))  // A → Z sorting
+    .map(tl => (
+      <option key={tl.user_id} value={tl.user_id}>
+        {tl.name}
+      </option>
+    ))
+  }
+</select>
+          </label>
+
+          <label>
+        
+            <select onChange={handleTransferAgentChange} value={transferFilters.agentId}>
+              <option value="">Select Agent</option>
+              {agentsTransfer.map(a => (
+                <option key={a.id} value={a.id}>{a.name}</option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+          
+            <select onChange={handleTransferStatus} value={transferFilters.transferstatus}>
+              <option value="">Select Lead Status</option>
+              <option value="1">New Lead</option>
+              <option value="11">Reassign Leads</option>
+              <option value="2">In Progress Leads</option>
+              <option value="3">Hot Leads</option>
+              <option value="0">Fresh Leads</option>
+              <option value="4">Archived Leads</option>
+              <option value="5">Converted Leads</option>
+            </select>
+          </label>
+
+          {selectedLeads.length > 0 && (
+            <p onClick={handleTransfer} style={{ padding: "5px 10px", borderRadius: 5, background: "#28a745", color: "#fff", border: "none" }}>
+              Transfer Selected Leads
+            </p>
+          )}
+        </form>
+      </div>
     </div>
-  )
+  );
 };
 
-export default ArchivedLead;
+export default LeadTransfer;

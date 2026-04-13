@@ -276,7 +276,7 @@ const UpdateLeadForm = () => {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             });
-            // console.log("response", res)
+            console.log("response", res)
             if (res.data.status == 200) {
 
                 toast.success("Client Update successfully!");
