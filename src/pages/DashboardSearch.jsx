@@ -83,6 +83,7 @@ const cards = [
   { title: "Archived Lead", key: "archived_lead", path: "/leads/archived", icon: "🗄️" },
   { title: "Converted", key: "converted", path: "/leads/converted", icon: " 🔄" },
   { title: "Complete Site Visit", key: "completed_site_visit", path: "/leads/completesite", icon: "✅" },
+   { title: "Data Bank", key: "data_bank", path: "/leads/databank", icon: "🏦" },
 ];
 
 
@@ -92,10 +93,10 @@ const cards = [
 
   return (
     <div className="dashboard-container">
-      <div className="dashboard-header">
+      {/* <div className="dashboard-header">
         <h2>Sales Dashboard</h2>
         <p>Overview of lead activities</p>
-      </div>
+      </div> */}
 {/* Filters */}
      <div className="filter-info">
   <div className="filter-item">

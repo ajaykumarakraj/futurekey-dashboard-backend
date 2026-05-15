@@ -7,6 +7,7 @@ import { useAuth } from "../../component/AuthContext";
 
 const LeadTransfer = () => {
   const { user } = useAuth();
+    const [totalRecords, setTotalRecords] = useState(0);
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [filters, setFilters] = useState({
     teamLeaderId: "",
@@ -138,6 +139,7 @@ const LeadTransfer = () => {
         setData(mapped);
         setCurrentPage(res.data.meta?.current_page || 1);
         setTotalPages(res.data.meta?.last_page || 1);
+         setTotalRecords(res?.data?.meta?.total);
       } else {
         setData([]);
       }
@@ -284,7 +286,11 @@ function getPageNumbers(currentPage, totalPages) {
 }
   return (
     <div>
-      <h2 className="mb-2 text-center textsize headingstyle">Lead Transfer</h2>
+     
+       <div className="d-flex">
+ <h2 className="mb-2 text-center textsize headingstyle">Lead Transfer</h2>
+       <h2 className="mb-2 text-center textsize headingstyle">{totalRecords}</h2>
+    </div>
       {errorMessage && <p style={{ color: "red", textAlign: "center" }}>{errorMessage}</p>}
       {loading && <p style={{ textAlign: "center" }}>Loading...</p>}
 

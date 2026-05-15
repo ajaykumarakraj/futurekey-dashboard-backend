@@ -6,17 +6,18 @@ import "../../app.css";
 import moment from "moment";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../component/AuthContext";
+import WalkUpload from "../WalkUpload";
 
-const FreshLead = () => {
+const DataBank = () => {
    const [searchParams] = useSearchParams();
   const { user } = useAuth()
-    const [totalRecords, setTotalRecords] = useState(0);
   const [data, setData] = useState([]);
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [teamLeaders, setTeamLeaders] = useState([]);
   const [agents, setAgents] = useState([]);
   const [projects, setProjects] = useState([]);
   const [search,setSearch]=useState("")
+    const [totalRecords, setTotalRecords] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
   const [filters, setFilters] = useState({
     teamLeaderId: "",
@@ -100,7 +101,7 @@ const handleSearchProject = async (e,page = 1) => {
 
       const list = res?.data?.data || [];
       const meta = res?.data?.meta;
-      console.log(list)
+//       console.log(list)
 // console.log(meta)
       const mapped = list.map((item, index) => ({
         serialNO: (page - 1) * rowsPerPage + index + 1,
@@ -112,12 +113,12 @@ const handleSearchProject = async (e,page = 1) => {
         city: item.city,
         leadSource: item.lead_source,
         project: item.form_name,
-        duplicatestatus:item.duplicate
       }));
 
       setData(mapped);
       setCurrentPage(meta?.current_page || 1);
       setTotalPages(meta?.last_page || 1);
+         setTotalRecords(res.data.meta?.total || 0);
     } catch (err) {
       console.error("Lead fetch error:", err);
     }
@@ -127,7 +128,8 @@ const handleSearchProject = async (e,page = 1) => {
     try {
       const payload = {
         lead_status: "0",
-         bulk_upload:"0",
+
+        bulk_upload:"1",
         page,
        tl_id:tl,agent_id:agent,project:project
       };
@@ -138,7 +140,7 @@ const handleSearchProject = async (e,page = 1) => {
 
       const list = res?.data?.data || [];
       const meta = res?.data?.meta;
-      console.log(list)
+      // console.log(list)
 
       const mapped = list.map((item, index) => ({
         serialNO: (page - 1) * rowsPerPage + index + 1,
@@ -156,7 +158,7 @@ const handleSearchProject = async (e,page = 1) => {
       setData(mapped);
       setCurrentPage(meta?.current_page || 1);
       setTotalPages(meta?.last_page || 1);
-       setTotalRecords(res?.data?.meta?.total);
+         setTotalRecords(res.data.meta?.total || 0);
     } catch (err) {
       console.error("Lead fetch error:", err);
     }
@@ -255,9 +257,9 @@ const handleSearchProject = async (e,page = 1) => {
   return (
 
     <div >
-    
-      <div className="d-flex">
-      <h2 className="mb-2 text-center textsize headingstyle">Fresh Leads</h2>
+     
+       <div className="d-flex">
+ <h2 className="mb-2 text-center textsize headingstyle">Bank Data</h2>
        <h2 className="mb-2 text-center textsize headingstyle">{totalRecords}</h2>
     </div>
     <form>
@@ -346,4 +348,4 @@ const handleSearchProject = async (e,page = 1) => {
   );
 };
 
-export default FreshLead;
+export default DataBank;

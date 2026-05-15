@@ -36,8 +36,24 @@ import CompleteSite from './pages/Table/CompleteSite';
 import DuplicateLead from './pages/Table/DuplicateLead';
 import DashboardSearch from './pages/DashboardSearch';
 import Addon from './pages/Table/Add-on';
-
+import DataBank from './pages/Table/DataBank';
+import { useEffect } from "react";
 const App = () => {
+  //   useEffect(() => {
+
+  //   const handleLogout = () => {
+  //     localStorage.removeItem("token");
+  //     localStorage.removeItem("user");
+  //     sessionStorage.clear();
+  //   };
+
+  //   window.addEventListener("beforeunload", handleLogout);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleLogout);
+  //   };
+
+  // }, []);
   return (
     <Routes>
       {/* Public Routes */}
@@ -84,6 +100,7 @@ const App = () => {
         <Route path='/connect-form' element={<ConnectForm />} />
         <Route path="/lead/searchalldata" element={<SearchAllData/>}/>
         <Route path="/leads/completesite" element={<CompleteSite/>}/>
+         <Route path="/leads/databank" element={<DataBank/>}/>
           <Route path="/duplicate-lead/:contactNumber" element={<DuplicateLead/>} />
       </Route>
 

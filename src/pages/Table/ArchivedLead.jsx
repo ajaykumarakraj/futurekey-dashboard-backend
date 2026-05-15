@@ -23,6 +23,7 @@ const LeadTransfer = () => {
   });
   const [data, setData] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+    const [totalRecords, setTotalRecords] = useState(0);
   const [agentsTransfer, setAgentsTransfer] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -144,6 +145,7 @@ const project = searchParams.get("project");
         setData(mapped);
         setCurrentPage(res.data.meta?.current_page || 1);
         setTotalPages(res.data.meta?.last_page || 1);
+         setTotalRecords(res?.data?.meta?.total);
       } else {
         setData([]);
       }
@@ -195,7 +197,7 @@ const handleSearch = async (page = 1) => {
         setData(mapped);
         setCurrentPage(res?.data?.meta?.current_page);
         setTotalPages(res?.data?.meta?.last_page);
-        // setTotalRecords(res?.data?.meta?.total);
+        setTotalRecords(res?.data?.meta?.total);
       } else {
         console.error('API did not return an array');
         setData([]);
@@ -350,7 +352,11 @@ function getPageNumbers(currentPage, totalPages) {
 }
   return (
     <div>
-      <h2 className="mb-2 text-center textsize headingstyle">Archived Leads</h2>
+      
+      <div className="d-flex">
+<h2 className="mb-2 text-center textsize headingstyle">Archived Leads</h2>
+       <h2 className="mb-2 text-center textsize headingstyle">{totalRecords}</h2>
+    </div>
       {errorMessage && <p style={{ color: "red", textAlign: "center" }}>{errorMessage}</p>}
       {loading && <p style={{ textAlign: "center" }}>Loading...</p>}
 

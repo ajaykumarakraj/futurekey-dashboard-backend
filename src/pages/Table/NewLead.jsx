@@ -245,10 +245,13 @@ try {
     { field: "leadstatus", headerName: "Lead Status", align: "center" },
     { field: "observation", headerName: "Observation", align: "left" },
   ];
-
+console.log(totalRecords,"totalRecords")
   return (
     <div>
-      <h2 className="mb-2 text-center textsize headingstyle">New Leads</h2>
+    <div className="d-flex">
+        <h2 className="mb-2 text-center textsize headingstyle">New Leads</h2>
+       <h2 className="mb-2 text-center textsize headingstyle">{totalRecords}</h2>
+    </div>
       {/* Filters */}
       <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>

@@ -100,7 +100,7 @@ const ConnectForm = () => {
             }
         } catch (error) {
             console.log(error)
-        }
+        } 
     }
 
 // merge api 

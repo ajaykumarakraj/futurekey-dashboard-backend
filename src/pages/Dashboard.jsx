@@ -91,9 +91,7 @@ const handleAgentChange = (e) => {
   const handleProjectChange = (e) => {
     setFilters(prev => ({ ...prev, projectId: e.target.value }));
   };
- // useEffect(() => {
-  //   fetchDashboardData();
-  // }, [user, token]);
+
 const getsearchdata=async(page = 1)=>{
     const payload={
     tl_id:filters.teamLeaderId||"",
@@ -106,7 +104,7 @@ try {
   const res=await api.post("/get-home-screen-data",payload,{  
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }    
   })
-  // console.log("get data",res.data.data)
+  console.log("get data",res.data.data)
  setData(res.data.data || {});
      
   
@@ -131,7 +129,7 @@ const cards = [
   { title: "Archived Lead", key: "archived_lead", path: "/leads/archived", icon: "🗄️" },
   { title: "Converted", key: "converted", path: "/leads/converted", icon: " 🔄" },
   { title: "Complete Site Visit", key: "completed_site_visit", path: "/leads/completesite", icon: "✅" },
-   
+    { title: "Data Bank", key: "data_bank", path: "/leads/databank", icon: "🏦" },
 ];
 
 
@@ -149,10 +147,37 @@ const handleSearch = () => {
 
   return (
     <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h2>Sales Dashboard</h2>
-        <p>Overview of lead activities</p>
-      </div>
+   <div className="dashboard-header d-flex justify-content-between align-items-center flex-wrap p-3 shadow-sm rounded bg-white">
+  
+  {/* Left Section */}
+  <div>
+    <h2 className="mb-1 fw-bold">Sales Dashboard</h2>
+    <p className="text-muted mb-0">Overview of lead activities</p>
+  </div>
+
+  {/* Right Section */}
+  <div className="d-flex gap-3 mt-3 mt-md-0">
+      <div className="filter-box">
+      <span>Leads Count</span>
+    </div>
+    <div className="filter-box">
+      <span>Today : {data.today_count}</span>
+    </div>
+
+    <div className="filter-box">
+      <span>Yesterday : {data.yesterday_count}</span>
+    </div>
+
+    <div className="filter-box">
+      <span>This Week : {data.this_week_count}</span>
+    </div>
+
+    <div className="filter-box">
+      <span>This Month : {data.this_month_count}</span>
+    </div>
+
+  </div>
+</div>
 {/* Filters */}
       <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
        <div className="box">

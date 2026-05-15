@@ -486,3 +486,23 @@ display: flex;
     justify-content: space-between;
 
 }
+.dashboard-header {
+  background: #fff;
+  border-radius: 12px;
+}
+
+.filter-box {
+  padding: 8px 14px;
+  border-radius: 8px;
+
+  font-size: 14px;
+  cursor: pointer;
+      background: #003961;
+    color: #fff;
+  transition: all 0.2s ease;
+}
+
+/* .filter-box:hover {
+  background: #e2e6ea;
+} */
+

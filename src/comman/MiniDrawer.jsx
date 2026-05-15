@@ -29,7 +29,7 @@ export default function MiniDrawer() {
       if (result.isConfirmed) {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
-        window.location.href = "/sign-in";
+        // window.location.href = "/sign-in";
       }
     });
   };
@@ -190,6 +190,15 @@ export default function MiniDrawer() {
                   }}>
                    📤 Bulk Upload
                   </li></Link>
+                  {/* <Link to="/leads/bulk-upload" style={{ color: 'white', textDecoration: 'none' }}><li style={{
+                    marginBottom: '10px', padding: '8px 12px',
+                    borderLeft: '4px solid #003961',
+                    fontSize: "12px",
+                    background: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'
+                  }}>
+                  🧰 Filter Leads
+                  </li></Link> */}
+                  
                   {/* <Link to="/leads/table" style={{ color: 'white', textDecoration: 'none' }}>   <li style={{
                     marginBottom: '10px', padding: '8px 12px',
                     borderLeft: '4px solid #003961',

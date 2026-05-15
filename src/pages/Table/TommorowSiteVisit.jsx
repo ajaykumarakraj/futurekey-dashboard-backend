@@ -249,7 +249,11 @@ try {
 
   return (
     <div>
-      <h2 className="mb-2 text-center textsize headingstyle">Tommorow Site Visit Leads</h2>
+     
+      <div className="d-flex">
+    <h2 className="mb-2 text-center textsize headingstyle">Tommorow Site Visit Leads</h2>
+       <h2 className="mb-2 text-center textsize headingstyle">{totalRecords}</h2>
+    </div>
       {/* Filter Section */}
       <div style={{ padding: "20px", background: "#eaeaea", borderRadius: "6px", marginBottom: "20px" }}>
         <form style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
